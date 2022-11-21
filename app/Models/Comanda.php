@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Producto extends Model
+class Comanda extends Model
 {
     use HasFactory;
-    protected $primaryKey = "codigo";
     public $timestamps = false;
     protected $fillable = [
-        'nombre',
-        'descripcion',
-        'stock',
-        'precio'
+        'fecha',
+        'estado',
+        'rut_encargado',
+        'id_venta'
 
     ];
 
-    public function promociones()
+    public function cocinero()
     { //relacion con id personalizada;
-        return $this->belongsToMany(Promocion::class, 'codigo_p');
+        return $this->hasOne(User::class, 'rut_encargado');
     }
 }

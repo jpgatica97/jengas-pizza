@@ -18,6 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     public $timestamps = false;
+    protected $table = "usuarios";
+    protected $primaryKey = "rut";
+    protected $keyType = 'string';
     protected $fillable = [
         'rut',
         'nombre_completo',
@@ -46,4 +49,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function comandas()
+    { //relacion con id personalizada;
+        return $this->belongsToMany(Comanda::class, 'rut_encargado');
+    }
+
+    public function ventas()
+    { //relacion con id personalizada;
+        return $this->hasMany(Venta::class, 'rut_cliente');
+    }
+
+    public function repartos()
+    { //relacion con id personalizada;
+        return $this->belongsTo(Reparto::class, 'rut_repartidor');
+    }
 }

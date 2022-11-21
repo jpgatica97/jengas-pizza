@@ -18,4 +18,12 @@ class Promocion extends Model
         'categoria'
 
     ];
+    public function productos()
+    { //relacion con id personalizada;
+        return $this->belongsToMany(Producto::class, 'codigo_prod');
+    }
+    public function ventas()
+    { //relacion con id personalizada;
+        return $this->belongsToMany(Venta::class, 'codigo_prom');
+    }
 }

@@ -8,4 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Venta extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        'fecha',
+        'estado',
+        'neto',
+        'iva',
+        'total',
+        'observaciones',
+        'medio_venta',
+        'metodo_pago',
+        'rut_cliente'
+
+    ];
+    public function cliente()
+    { //relacion con id personalizada;
+        return $this->hasOne(User::class, 'rut_cliente');
+    }
+    public function promociones()
+    { //relacion con id personalizada;
+        return $this->hasMany(Promocion::class, 'codigo_p');
+    }
 }
