@@ -15,6 +15,8 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/validarRut.js') }}"></script>
 </head>
 <body style="background: red">
     <div id="app" >
@@ -77,4 +79,5 @@
         </main>
     </div>
 </body>
+
 </html>

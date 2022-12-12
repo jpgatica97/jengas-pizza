@@ -31,5 +31,11 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
 
     <div>
 <div>
+    <div style="display: flex; position: relative">
+        <div style="position: sticky">
+            <a style="text-align: right; color: white" href="https://wa.me/message/L2NXQVBEBGEHJ1" target="_blank"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" height="100px" alt="WhatsApp"></a>
+        </div>
+
+    </div>
 
 @endsection

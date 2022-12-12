@@ -15,7 +15,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('RUT') }}</label>
 
                             <div class="col-md-6">
-                                <input id="rut" type="text" class="form-control @error('rut') is-invalid @enderror" name="rut" value="{{ old('rut') }}" required autocomplete="rut" autofocus>
+                                <input id="rut" type="text" oninput="checkRut(this)" class="form-control @error('rut') is-invalid @enderror" name="rut" value="{{ old('rut') }}" required autocomplete="rut" autofocus>
 
                                 @error('rut')
                                 <span class="invalid-feedback" role="alert">

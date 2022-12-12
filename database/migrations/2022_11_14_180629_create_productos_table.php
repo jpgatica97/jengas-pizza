@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('descripcion');
             $table->integer('stock')->unsigned();
             $table->integer('precio')->unsigned();
+            $table->string('visible')->default('visible');
         });
     }
 

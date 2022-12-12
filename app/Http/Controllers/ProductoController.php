@@ -63,6 +63,6 @@ class ProductoController extends Controller
     //Función que elimina un producto
     public function destroy(Producto $producto){
         $producto->delete();
-        return redirect()->route('plataforma.productos.index')->withSuccess('El producto '.$producto->nombre.' fué eliminado exitosamente');
+        return redirect()->route('plataforma.productos.index')->with('eliminar','ok');
     }
 }

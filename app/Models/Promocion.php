@@ -15,7 +15,8 @@ class Promocion extends Model
         'nombre',
         'descripcion',
         'precio',
-        'categoria'
+        'categoria',
+        'visible'
 
     ];
     public function productos()

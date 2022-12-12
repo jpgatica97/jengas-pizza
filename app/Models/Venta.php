@@ -23,7 +23,7 @@ class Venta extends Model
     ];
     public function cliente()
     { //relacion con id personalizada;
-        return $this->hasOne(User::class, 'rut_cliente');
+        return $this->belongsTo(User::class, 'rut_cliente');
     }
     public function promociones()
     { //relacion con id personalizada;

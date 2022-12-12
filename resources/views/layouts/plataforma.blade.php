@@ -10,12 +10,13 @@
     <link href="{{ asset('css/dataTables.bootstrap.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/datatables.css') }}" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/validarRut.js') }}"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap5.js') }}"></script>
     <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body class="sb-nav-fixed">
@@ -54,7 +55,7 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Principal</div>
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="{{ route('plataforma') }}">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Inicio
                     </a>
@@ -83,8 +84,24 @@
                             </a>
                             <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="login.html">Ver ventas</a>
-                                    <a class="nav-link" href="register.html">Crear venta en local</a>
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.index') }}">Ver ventas en local</a>
+                                    <form action="{{ route('ventas.store') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" class="form-control" name="fecha" value="{{  \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
+                                        <input type="hidden" class="form-control" name="estado" value="creacion">
+                                        <input type="hidden" class="form-control" name="neto" value="0">
+                                        <input type="hidden" class="form-control" name="iva" value="0">
+                                        <input type="hidden" class="form-control" name="total" value="0">
+                                        <input type="hidden" class="form-control" name="observaciones" value="-">
+                                        <input type="hidden" class="form-control" name="medio_venta" value="presencial">
+                                        <input type="hidden" class="form-control" name="metodo_pago" value="-">
+                                        <input type="hidden" class="form-control" name="rut_cliente" value="{{ Auth::user()->rut }}">
+
+                                        <button type="submit" class="nav-link">Crear venta en local</button>
+                                    </form>
+                                    {{--}}
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.create') }}">Crear venta en local</a>
+                                    {{--}}
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
@@ -93,12 +110,61 @@
                             </a>
                             <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="401.html">Tomar pedidos</a>
-                                    <a class="nav-link" href="404.html">Ver pedidos</a>
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Tomar pedidos</a>
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Ver pedidos</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseReportes" aria-expanded="false" aria-controls="pagesCollapseReportes">
+                                Reportes de ventas
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseReportes" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Reporte diario</a>
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Reporte mensual</a>
                                 </nav>
                             </div>
                         </nav>
                     </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComandas" aria-expanded="false" aria-controls="collapseComandas">
+                        <div class="sb-nav-link-icon"> <i class="fas fa-pizza"></i> </div>
+                        Comandas
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseComandas" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('plataforma.usuarios.index') }}">Ver comandas</a>
+
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsuarios" aria-expanded="false" aria-controls="collapseUsuarios">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                        Empleados
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseUsuarios" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('plataforma.usuarios.index') }}">Ver empleados</a>
+                            <a class="nav-link" href="{{ route('plataforma.usuarios.habilitaciones') }}">Habilitar/Deshabilitar Empleado</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRepartos" aria-expanded="false" aria-controls="collapseRepartos">
+                        <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
+                        Despachos
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseRepartos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('plataforma.usuarios.index') }}">Agregar despacho</a>
+                            <a class="nav-link" href="{{ route('plataforma.usuarios.habilitaciones') }}">Gestionar despachos</a>
+                        </nav>
+                    </div>
+
+
+
 
                 </div>
             </div>
@@ -131,5 +197,6 @@
 <script src="{{ asset('adminlte/demo/chart-bar-demo.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="{{ asset('adminlte/js/datatables-simple-demo.js') }}"></script>
+@yield('js')
 </body>
 </html>

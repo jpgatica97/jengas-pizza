@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('promociones_ventas', function (Blueprint $table) {
+            $table->id();
             $table->integer('codigo_promocion')->unsigned();
             $table->bigInteger('id_venta')->unsigned();
             $table->integer('cantidad')->unsigned();
