@@ -59,10 +59,10 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                         <td> {{ $pv->cantidad }} </td>
                                         @foreach ($promociones as $promo)
                                             @if ($pv->codigo_promocion == $promo->codigo)
-                                                <td> {{ $promo->precio }} </td>
+                                                <td> ${{ $promo->precio }} </td>
                                             @endif
                                         @endforeach
-                                        <td> {{ $pv->subtotal }} </td>
+                                        <td> ${{ $pv->subtotal }} </td>
                                         <td>
                                             <form class="d-inline"
                                                   action="{{ route('plataforma.ventas.eliminarP', [
@@ -97,20 +97,20 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                     <div class="col"></div>
                                     <div class="col" style="border: 1px solid black; text-align: right">
                                         <strong>Neto:</strong> $@if ($venta->neto == null)
-                                            0
+                                            nn
                                         @else
                                             {{ $venta->neto }}
                                         @endif
                                         <br>
                                         <strong>IVA:</strong> $@if ($venta->iva == null)
-                                            0
+                                            nn
                                         @else
                                             {{ $venta->iva }}
                                         @endif
                                         <br>
 
                                         <strong>Total:</strong> $@if ($venta->total == null)
-                                            0
+                                            nn
                                         @else
                                             {{ $venta->total }}
                                         @endif
@@ -121,8 +121,9 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#modalDeshacer">
                                     Deshacer venta</button>
+
                                 @if ($venta->total != null)
-                                    <button type="submit" class="btn btn-success" data-bs-toggle="modal">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearV">
                                         Crear venta</button>
                                 @endif
 
@@ -188,32 +189,73 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="modalDeshacer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modalCrearV" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Deshacer venta</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Crear venta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Está segur@ de cancelar la creación de esta venta?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                     <form class="d-inline"
-                          action="{{ route('plataforma.ventas.destroy', [
+                          action="{{ route('plataforma.ventas.guardar', [
                             'venta' => $venta->id,
                         ]) }}"
                           method="post">
+                          @method('put')
                         @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Si</button>
+                        <input type="hidden" name="estado" value="pagado">
+                                <div class="col">
+                                    <label for="codigo">Medio de pago:</label>
+                                    <div class="col-md-12">
+                                        <select class="form-select" id="metodo_pago" name="metodo_pago">
+                                            <option selected value="">Seleccione medio de pago...</option>
+                                                <option value="efectivo">Efectivo</option>
+                                                <option value="credito">Tarjeta de crédito</option>
+                                                <option value="debito">Tarjeta de débito</option>
+                                        </select>
+                                    </div>
+                                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+
+
+                        <button type="submit" class="btn btn-success">Crear</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+     <!-- Modal -->
+     <div class="modal fade" id="modalDeshacer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Deshacer venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Está segur@ de cancelar la creación de esta venta?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form class="d-inline"
+                      action="{{ route('plataforma.ventas.destroy', [
+                        'venta' => $venta->id,
+                    ]) }}"
+                      method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Si</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
         $('#codigo_promocion').select2({
             dropdownParent: $('#insertarModal')

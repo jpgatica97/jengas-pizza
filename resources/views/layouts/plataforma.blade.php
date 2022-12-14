@@ -120,8 +120,8 @@
                             </a>
                             <div class="collapse" id="pagesCollapseReportes" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Reporte diario</a>
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Reporte mensual</a>
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Reporte diario</a> {{--reportesD --}}
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Reporte mensual</a> {{--reportesM --}}
                                 </nav>
                             </div>
                         </nav>
@@ -134,7 +134,7 @@
                     </a>
                     <div class="collapse" id="collapseComandas" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{ route('plataforma.usuarios.index') }}">Ver comandas</a>
+                            <a class="nav-link" href="{{ route('plataforma.comandas.index') }}">Ver comandas</a>
 
                         </nav>
                     </div>
@@ -158,8 +158,8 @@
                     </a>
                     <div class="collapse" id="collapseRepartos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{ route('plataforma.usuarios.index') }}">Agregar despacho</a>
-                            <a class="nav-link" href="{{ route('plataforma.usuarios.habilitaciones') }}">Gestionar despachos</a>
+                            <a class="nav-link" href="{{ route('plataforma.repartos.create') }}">Agregar despacho</a>
+                            <a class="nav-link" href="{{ route('plataforma.repartos.index') }}">Gestionar despachos</a>
                         </nav>
                     </div>
 

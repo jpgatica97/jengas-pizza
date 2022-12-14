@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/validarRut.js') }}"></script>
 </head>
@@ -37,11 +38,15 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            @inject('carritoService', 'App\Services\CarritoService')
+                            <a class="nav-link" href="{{ route('carritos.index') }}"><i class="fas fa-shopping-cart"></i> {{ __('Carrito') }} ({{ $carritoService->contarPromos() }}) </a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar sesión') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}"> {{ __('Iniciar sesión') }}</a>
                                 </li>
                             @endif
 

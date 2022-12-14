@@ -27,6 +27,6 @@ class Venta extends Model
     }
     public function promociones()
     { //relacion con id personalizada;
-        return $this->hasMany(Promocion::class, 'codigo_p');
+        return $this->belongsToMany(Promocion::class, 'codigo_promocion')->withPivot(['cantidad', 'subtotal']);
     }
 }

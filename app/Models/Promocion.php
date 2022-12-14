@@ -25,6 +25,10 @@ class Promocion extends Model
     }
     public function ventas()
     { //relacion con id personalizada;
-        return $this->belongsToMany(Venta::class, 'codigo_prom');
+        return $this->belongsToMany(Venta::class, 'codigo_promocion')->withPivot(['cantidad', 'subtotal']);
+    }
+    public function carritos()
+    {//RElacion muchos a muchos
+        return $this->belongsToMany(Carrito::class)->withPivot('cantidad');
     }
 }

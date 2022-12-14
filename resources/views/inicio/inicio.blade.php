@@ -23,7 +23,10 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
                         <h5 class="card-title" style="color: white"> <span class="badge text-bg-info">{{ $promo->categoria }}</span></h5>
                         <p class="card-text" style="color: white">{{ $promo->descripcion }}</p>
                         <p style="color: white">Precio: <strong>{{ $promo->precio }}</strong></p>
-                        <a href="#" class="btn btn-primary">Lo quiero!</a>
+                        <form action="{{ route('promociones.carritos.store', ['promocion' => $promo->codigo]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Lo quiero!</button>
+                        </form>
                     </div>
                 </div>
             </div>
