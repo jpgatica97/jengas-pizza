@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class VentaController extends Controller
 {
@@ -43,6 +44,7 @@ class VentaController extends Controller
     {
         return view('plataforma.ventas.indexOnline')->with([
             'ventas' => DB::table('ventas')->where('medio_venta', 'online')->get(),
+            'cocineros' => DB::table('usuarios')->where('rol', 'cocinero')->get(),
         ]);
     }
 
@@ -240,6 +242,7 @@ class VentaController extends Controller
         return view('inicio.confirmar')->with([
             'venta' => $venta,
         ]);
+        cookie()->delete();
     }
 
 }

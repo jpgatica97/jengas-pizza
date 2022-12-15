@@ -24,6 +24,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                     </thead>
                     <tbody>
                     @foreach ($usuarios as $usuario)
+                        @if ($usuario->rol != "cliente")
                         <tr>
                             <td>{{$usuario->rut}}</td>
                             <td>{{$usuario->nombre_completo}}</td>
@@ -53,6 +54,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                 @endif
                             </td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

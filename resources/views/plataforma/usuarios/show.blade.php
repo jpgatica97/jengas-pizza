@@ -2,50 +2,56 @@
 
 @section('content')
     <div class="container">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h2>{{$promocion->nombre}}</h2>
-            </div>
-            <div class="card-body">
-                <div class="mb-3 row">
-                    <label for="codigo" class="col-sm-2 col-form-label">Código:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="codigo" value="({{$promocion->codigo}})">
-                    </div>
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card" style="background-color: rgba(215,215,215,0.1);
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5))">
+                    <div class="card-header" style="color: white; background-color: black">{{ __('Detalles empleado') }}</div>
+                    <div class="card-body">
+                        <div class="row mb-3">
 
-                <div class="mb-3 row">
-                    <label for="descripcion" class="col-sm-2 col-form-label">Descripción:</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" readonly class="form-control" id="descripcion" value="{{$promocion->descripcion}}">{{$promocion->descripcion}} </textarea>
-                    </div>
-                </div>
+                            <label for="nombre" class="col-md-4 col-form-label text-md-end">Nombre</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="nombre"
+                                    value="{{ old('nombre_completo') ?? $usuario->nombre_completo }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 col-form-label text-md-end" for="rol">Rol</label>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="rol"
+                                    value="{{ old('rol') ?? $usuario->rol }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <label for="descripcion" class="col-md-4 col-form-label text-md-end">Email</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="email"
+                                    value="{{ old('email') ?? $usuario->email }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <label for="precio" class="col-md-4 col-form-label text-md-end">Dirección</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="direccion"
+                                    value="{{ old('direccion') ?? $usuario->direccion }}" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <label for="stock" class="col-md-4 col-form-label text-md-end">Habilitado?</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="habilitacion" disabled
+                                    value="{{ old('habilitacion') ?? $usuario->habilitacion }}">
+                            </div>
+                        </div>
 
 
-                <div class="mb-3 row">
-                    <label for="precio" class="col-sm-2 col-form-label">Precio:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="precio" value="${{$promocion->precio}}">
-                    </div>
-                </div>
-
-
-                <div class="mb-3 row">
-                    <label for="categoria" class="col-sm-2 col-form-label">Categoría:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="categoria" value="{{$promocion->categoria}} Unidades">
                     </div>
                 </div>
             </div>
         </div>
-        <a class="btn btn-secondary" href="{{ route('plataforma.promociones.index') }}"><i class="fas fa-th-list"></i> Volver a la lista</a>
-        <a class="btn btn-primary" href="{{ route('plataforma.promociones.edit', [
-                                'promocion' => $promocion->codigo]) }}"><i class="fas fa-edit"></i> Editar esta promoción</a>
-        <form class="d-inline" action="{{route('plataforma.promociones.destroy', [
-                                'promocion' => $promocion->codigo])}}" method="post">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Eliminar esta promoción</button>
-        </form>
-    </div>
-@endsection
+    @endsection

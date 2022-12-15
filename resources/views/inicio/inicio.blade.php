@@ -10,6 +10,12 @@
         <p style="color: white">Concepto único en la zona!! "Hot and Ready"</p>
     </div>
 </div>
+<div style="display: flex; position: sticky">
+    <div style="position: absolute; right: 5px">
+        <a style="text-align: right; color: white" href="https://wa.me/message/H4Y4TCF5CJOXD1" target="_blank"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" height="100px" alt="WhatsApp"></a>
+    </div>
+
+</div>
 
 <div class="container">
     <div class="row">
@@ -33,12 +39,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
             @endforeach
 
     <div>
-<div>
-    <div style="display: flex; position: relative">
-        <div style="position: sticky">
-            <a style="text-align: right; color: white" href="https://wa.me/message/L2NXQVBEBGEHJ1" target="_blank"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/150px-WhatsApp.svg.png" height="100px" alt="WhatsApp"></a>
-        </div>
 
-    </div>
+
 
 @endsection

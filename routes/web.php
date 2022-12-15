@@ -92,4 +92,4 @@ Route::get('carrito',[\App\Http\Controllers\CarritoController::class, 'index'])-
 Route::get('ventas/create', [\App\Http\Controllers\VentaController::class, 'createO'])->name('ventasO.create');
 Route::post('ventas/', [\App\Http\Controllers\VentaController::class, 'storeO'])->name('ventasO.store');
 Route::get('ventas/webpay/{venta}', [\App\Http\Controllers\VentaController::class, 'webpay'])->name('ventasO.webpay');
-Route::get('ventas/confirmacion/{venta}', [\App\Http\Controllers\VentaController::class, 'connfirmacion'])->name('ventasO.confirmacion');
+Route::get('ventas/confirmacion/{venta}', [\App\Http\Controllers\VentaController::class, 'confirmacion'])->name('ventasO.confirmacion');
