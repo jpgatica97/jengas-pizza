@@ -17,7 +17,7 @@ class Reparto extends Model
     ];
     public function venta()
     { //relacion con id personalizada;
-        return $this->hasOne(Venta::class, 'id_venta');
+        return $this->hasOne(Venta::class, 'id');
     }
     public function repartidor()
     { //relacion con id personalizada;

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reparto', function (Blueprint $table) {
+        Schema::create('repartos', function (Blueprint $table) {
             $table->id();
             $table->string('estado');
             $table->string('rut_repartidor');

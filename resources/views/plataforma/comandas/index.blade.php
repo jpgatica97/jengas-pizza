@@ -5,7 +5,7 @@
 background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5))">
         <h1 style="margin-top: 10px">Comandas</h1>
 
-        @if ($productos->isEmpty())
+        @if ($comandas->isEmpty())
             <div class="alert alert-warning">
                 No hay comandas
             </div>
@@ -25,7 +25,13 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                     @foreach ($comandas as $comanda)
                         <tr>
                             <td>{{$comanda->id_venta}}</td>
-                            <td>{{$comanda->rut_encargado}}</td>
+                            <td>
+                                @foreach ($cocineros as $cocinero)
+                                    @if ($cocinero->rut == $comanda->rut_encargado)
+                                    {{$cocinero->nombre_completo}}
+                                    @endif
+                                @endforeach
+                            </td>
                             <td>{{$comanda->estado}}</td>
                             <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.comandas.show', [

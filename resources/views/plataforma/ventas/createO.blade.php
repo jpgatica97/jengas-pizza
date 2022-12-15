@@ -81,8 +81,19 @@
             <div class="container">
                 <form action="{{route('ventasO.store') }}" method="post">
                 @csrf
-                @if ((isset(Auth::user()->rut)) || (isset($usuario)))
-                <button type="submit" class="btn btn-success"><i class="fas fa-pay"></i> Pagar</button>
+                @if ((isset(Auth::user()->rut)))
+                <input type="hidden" class="form-control" name="fecha"value="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}" required>
+                <input type="hidden" class="form-control" name="estado"value="creacion" required>
+                <input type="hidden" class="form-control" name="neto"value="{{$total - ($total*0.19)}}" required>
+                <input type="hidden" class="form-control" name="iva"value="{{($total*0.19)}}" required>
+                <input type="hidden" class="form-control" name="total"value="{{$total}}" required>
+                <label for="observaciones">Observaciones</label>
+                <input type="text" class="form-control" name="observaciones" id="observaciones" value="-" required>
+                <input type="hidden" class="form-control" name="medio_venta"value="online" required>
+                <input type="hidden" class="form-control" name="metodo_pago"value="webpay" required>
+                <input type="hidden" class="form-control" name="rut_cliente"value="{{Auth::user()->rut}}" required>
+                <br>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-pay"></i> Pagar</button>
                 @endif
                 </form>
             </div>

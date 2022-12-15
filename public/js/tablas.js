@@ -24,3 +24,9 @@ $(document).ready( function () {
 $(document).ready( function () {
     $('#misTrabajosTodos').DataTable();
 } );
+$(document).ready( function () {
+    $('#sinreparto').DataTable();
+} );
+$(document).ready( function () {
+    $('#misrepartos').DataTable();
+} );

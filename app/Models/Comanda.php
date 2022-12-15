@@ -21,6 +21,8 @@ class Comanda extends Model
     { //relacion con id personalizada;
         return $this->hasOne(User::class, 'rut_encargado');
     }
+
+
     public function venta()
     { //relacion con id personalizada;
         return $this->hasOne(Venta::class, 'id_venta');

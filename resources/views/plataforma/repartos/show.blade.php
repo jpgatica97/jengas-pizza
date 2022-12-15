@@ -4,48 +4,73 @@
     <div class="container">
         <div class="card shadow-sm">
             <div class="card-header">
-                <h2>{{$producto->nombre}}</h2>
+                <h2>Reparto de pedido de {{$reparto->venta->cliente->nombre_completo}}
+                </h2>
             </div>
             <div class="card-body">
-                <div class="mb-3 row">
-                    <label for="codigo" class="col-sm-2 col-form-label">Código:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="codigo" value="({{$producto->codigo}})">
-                    </div>
-                </div>
+                <ul class="list-group">
+                    @foreach($promos as $promo)
+                    <li class="list-group-item">
+                        <div class="container" style="display: flex">
+                            <img src="{{ asset('publicidad/image00087.jpg') }}" alt="pizza" style="margin-top: 5px;" height="200px">
+                            <div style="margin-left: 10px">
+                                <h2>
+                                    ({{$promo->cantidad}}) x
+                                    @foreach ($promociones as $promocion)
+                                        @if ($promo->codigo_promocion == $promocion->codigo)
+                                         {{$promocion->nombre}}
+                                        @endif
+                                    @endforeach
+                                </h2>
 
-                <div class="mb-3 row">
-                    <label for="descripcion" class="col-sm-2 col-form-label">Descripción:</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" readonly class="form-control" id="descripcion" value="{{$producto->descripcion}}">{{$producto->descripcion}} </textarea>
-                    </div>
-                </div>
+                                <p>
+                                    @foreach ($promociones as $promocion)
+                                        @if ($promo->codigo_promocion == $promocion->codigo)
+                                         {{$promocion->descripcion}}</p>
+                                        @endif
+                                    @endforeach
+                            </div>
+                        </div>
+                        @endforeach
+                    </li>
 
-
-                <div class="mb-3 row">
-                    <label for="precio" class="col-sm-2 col-form-label">Precio:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="precio" value="${{$producto->precio}}">
-                    </div>
-                </div>
-
-
-                <div class="mb-3 row">
-                    <label for="stock" class="col-sm-2 col-form-label">Stock:</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="stock" value="{{$producto->stock}} Unidades">
-                    </div>
-                </div>
+                </ul>
             </div>
-        </div>
-        <a class="btn btn-secondary" href="{{ route('plataforma.productos.index') }}"><i class="fas fa-th-list"></i> Volver a la lista</a>
-        <a class="btn btn-primary" href="{{ route('plataforma.productos.edit', [
-                                'producto' => $producto->codigo]) }}"><i class="fas fa-edit"></i> Editar este producto</a>
-        <form class="d-inline" action="{{route('plataforma.productos.destroy', [
-                                'producto' => $producto->codigo])}}" method="post">
+            <h4 style="text-align: center">Dirección de entrega: <strong>{{$reparto->venta->cliente->direccion}}</strong></h4>
+
+        <div class="container" style="text-align: center">
+            <form class="d-inline form-finalizar-com" action="{{route('plataforma.repartos.finalizar', [
+            'reparto' => $reparto->id])}}" method="post">
+            @method('PUT')
             @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Eliminar este producto</button>
+            <input type="hidden" class="form-control" name="estado"value="finalizado" required>
+            <input type="hidden" class="form-control" name="id"
+                                            value="{{$reparto->id}}" required>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Finalizar despacho</button>
         </form>
+        </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $('.form-finalizar-com').submit(function(e){
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro/a de finalizar el despacho?',
+                text: "El despacho se marcará como finalizado y la venta estará conclusa",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, finalizar!',
+                cancelButtonText: 'No, cancelar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    this.submit();
+                }
+            })
+        });
+    </script>
 @endsection

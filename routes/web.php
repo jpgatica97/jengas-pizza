@@ -80,9 +80,10 @@ Route::get('plataforma/repartos',[\App\Http\Controllers\RepartoController::class
 Route::get('plataforma/repartos/create', [\App\Http\Controllers\RepartoController::class, 'create'])->name('plataforma.repartos.create');
 Route::post('plataforma/repartos', [\App\Http\Controllers\RepartoController::class, 'store'])->name('repartos.store');
 Route::get('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'show'] )->name('plataforma.repartos.show');
-Route::get('plataforma/repartos/{reparto}/edit', [\App\Http\Controllers\RepartoController::class, 'edit'])->name('plataforma.repartos.edit');
+Route::get('plataforma/repartos/{reparto}/tomar', [\App\Http\Controllers\RepartoController::class, 'tomar'])->name('plataforma.repartos.tomar');
 Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'update'])->name('plataforma.repartos.update');
-Route::delete('plataforma/repartos/{producto}', [\App\Http\Controllers\RepartoController::class, 'destroy'])->name('plataforma.productos.destroy');
+Route::delete('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'destroy'])->name('plataforma.productos.destroy');
+Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'finalizar'])->name('plataforma.repartos.finalizar');
 
 //Rutas del carrito
 Route::post('plataforma/promociones/{promocion}/carrito', [\App\Http\Controllers\PromocionCarritoController::class, 'store'])->name('promociones.carritos.store');
@@ -90,3 +91,5 @@ Route::delete('plataforma/promociones/{promocion}/carrito/{carrito}', [\App\Http
 Route::get('carrito',[\App\Http\Controllers\CarritoController::class, 'index'])->name('carritos.index');
 Route::get('ventas/create', [\App\Http\Controllers\VentaController::class, 'createO'])->name('ventasO.create');
 Route::post('ventas/', [\App\Http\Controllers\VentaController::class, 'storeO'])->name('ventasO.store');
+Route::get('ventas/webpay/{venta}', [\App\Http\Controllers\VentaController::class, 'webpay'])->name('ventasO.webpay');
+Route::get('ventas/confirmacion/{venta}', [\App\Http\Controllers\VentaController::class, 'connfirmacion'])->name('ventasO.confirmacion');

@@ -35,6 +35,7 @@ class VentaController extends Controller
     {
         return view('plataforma.ventas.index')->with([
             'ventas' => DB::table('ventas')->where('medio_venta', 'presencial')->get(),
+            'cocineros' => DB::table('usuarios')->where('rol', 'cocinero')->get(),
         ]);
     }
     //Muestra todos los datos de las ventas online
@@ -97,7 +98,7 @@ class VentaController extends Controller
             ]);
         }
 
-        return redirect()->route('inicio.confirmar', ['venta' => $venta->id,]);
+        return redirect()->route('ventasO.webpay', ['venta' => $venta->id,]);
     }
 
     public function noRegistrado(UsuarioRequest $request)
@@ -226,4 +227,19 @@ class VentaController extends Controller
         $pdf = Pdf::loadView('plataforma.boleta.export', $data);
         return $pdf->download('Boleta.pdf');
     }
+    public function webpay(Venta $venta)
+    {
+        $carrito = $this->carritoService->getFromCookie();
+        return view('inicio.webpayFalso')->with([
+            'venta' => $venta,
+        ]);
+    }
+    public function confirmacion(Venta $venta)
+    {
+        $venta = Venta::where("id", $venta->id)->update(["estado"=> "pagado"]);
+        return view('inicio.confirmar')->with([
+            'venta' => $venta,
+        ]);
+    }
+
 }
