@@ -49,6 +49,11 @@ class HomeController extends Controller
 
     public function empleados()
     {
+        if (Auth::user()->rol == 'cliente') {
+            return view('inicio.inicio')->with([
+                'promociones' => DB::table('promociones')->get(),
+            ]);
+        }
         return view('plataforma.usuarios.index')->with([
             'usuarios' => DB::table('usuarios')->get(),
         ]);
@@ -57,7 +62,11 @@ class HomeController extends Controller
 
     public function edit(User $usuario)
     {
-
+        if (Auth::user()->rol == 'cliente') {
+            return view('inicio.inicio')->with([
+                'promociones' => DB::table('promociones')->get(),
+            ]);
+        }
         return view('plataforma.usuarios.edit')->with([
             'usuario' => $usuario,
         ]);
@@ -65,17 +74,31 @@ class HomeController extends Controller
 
     public function update(UsuarioRequest $request, User $usuario)
     {
-        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['nombre_completo' => $usuario->nombre_completo], ['email' =>$usuario->email], ['rol' => $usuario->rol], ['direccion'=>$usuario->direccion], ['habilitacion' => $usuario->habilitacion ]);
+        if (Auth::user()->rol == 'cliente') {
+            return view('inicio.inicio')->with([
+                'promociones' => DB::table('promociones')->get(),
+            ]);
+        }
+        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['nombre_completo' => request()->nombre_completo], ['email' =>request()->email], ['rol' => request()->rol], ['direccion'=>request()->direccion], ['habilitacion' => request()->habilitacion ]);
         return redirect()->route('plataforma.usuarios.index')->with('actualizacion', 'ok');
     }
     public function show(User $usuario){
-
+        if (Auth::user()->rol == 'cliente') {
+            return view('inicio.inicio')->with([
+                'promociones' => DB::table('promociones')->get(),
+            ]);
+        }
         return view('plataforma.usuarios.show')->with([
             'usuario'=> $usuario,
         ]);
     }
     public function habilitaciones()
     {
+        if (Auth::user()->rol == 'cliente') {
+            return view('inicio.inicio')->with([
+                'promociones' => DB::table('promociones')->get(),
+            ]);
+        }
         return view('plataforma.usuarios.habilitaciones')->with([
             'usuarios' => DB::table('usuarios')->get(),
         ]);

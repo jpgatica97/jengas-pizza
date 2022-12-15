@@ -82,7 +82,7 @@ Route::post('plataforma/repartos', [\App\Http\Controllers\RepartoController::cla
 Route::get('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'show'] )->name('plataforma.repartos.show');
 Route::get('plataforma/repartos/{reparto}/tomar', [\App\Http\Controllers\RepartoController::class, 'tomar'])->name('plataforma.repartos.tomar');
 Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'update'])->name('plataforma.repartos.update');
-Route::delete('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'destroy'])->name('plataforma.productos.destroy');
+Route::delete('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'destroy'])->name('plataforma.repartos.destroy');
 Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'finalizar'])->name('plataforma.repartos.finalizar');
 
 //Rutas del carrito

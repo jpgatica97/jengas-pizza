@@ -110,7 +110,9 @@
                             </a>
                             <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <!--
                                     <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Tomar pedidos</a>
+                                    -->
                                     <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Ver pedidos</a>
                                 </nav>
                             </div>
