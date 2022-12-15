@@ -25,21 +25,11 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                     @foreach ($ventas as $venta)
                         <tr>
                             <td>{{$venta->id}}</td>
-                            <td>@foreach ($clientes as $cliente)
-                                    @if ($cliente->rut == $venta->rut_cliente)
-                                        {{ $cliente->nombre_completo }}
-                                    @endif
-                                @endforeach</td>
-                            <td>@foreach ($clientes as $cliente)
-                                    @if ($cliente->rut == $venta->rut_cliente)
-                                    {{ $cliente->direccion }}
-                                    @endif</td>
-                                @endforeach
-                            <td>@foreach ($clientes as $cliente)
-                                    @if ($cliente->rut == $venta->rut_cliente)
-                                    {{ $cliente->email }}
-                                    @endif</td>
-                                @endforeach                            <td>
+                            <td>{{$venta->cliente->nombre_completo}}</td>
+                            <td>{{$venta->cliente->direccion}}</td>
+
+                            <td>{{$venta->cliente->email}}</td>
+                            <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.ventas.show', [
                                     'venta' => $venta->id]) }}"><i class="fas fa-eye"></i>Ver</a>
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearD{{$venta->id}}">

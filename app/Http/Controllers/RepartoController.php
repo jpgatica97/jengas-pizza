@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ComandaFinalizarRequest;
 use App\Http\Requests\RepartoRequest;
 use App\Models\Promocion;
 use App\Models\PromocionesVentas;
@@ -67,8 +68,8 @@ class RepartoController extends Controller
         return redirect()->route('plataforma.repartos.index')->with('finalizado', 'ok');
     }
     //Función que actualiza el estado del despacho
-    public function finalizar(RepartoRequest $request, Reparto $reparto){
-        $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "finalizado"]);
+    public function finalizar(ComandaFinalizarRequest $request, Reparto $reparto){
+        $venta = Venta::where("id", $reparto->id_venta)->update(["estado"=> "finalizado"]);
         $reparto->update($request->validated());
         return redirect()->route('plataforma.repartos.index')->with('finalizado', 'ok');
     }
