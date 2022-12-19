@@ -85,23 +85,9 @@
                             <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('plataforma.ventas.index') }}">Ver ventas en local</a>
-                                    <form action="{{ route('ventas.store') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" class="form-control" name="fecha" value="{{  \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
-                                        <input type="hidden" class="form-control" name="estado" value="creacion">
-                                        <input type="hidden" class="form-control" name="neto" value="0">
-                                        <input type="hidden" class="form-control" name="iva" value="0">
-                                        <input type="hidden" class="form-control" name="total" value="0">
-                                        <input type="hidden" class="form-control" name="observaciones" value="-">
-                                        <input type="hidden" class="form-control" name="medio_venta" value="presencial">
-                                        <input type="hidden" class="form-control" name="metodo_pago" value="-">
-                                        <input type="hidden" class="form-control" name="rut_cliente" value="{{ Auth::user()->rut }}">
 
-                                        <button type="submit" class="nav-link">Crear venta en local</button>
-                                    </form>
-                                    {{--}}
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.create') }}">Crear venta en local</a>
-                                    {{--}}
+                                    <a class="nav-link" href="{{ route('plataforma.ventas.ventaLocal') }}">Crear venta en local</a>
+
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
@@ -110,9 +96,7 @@
                             </a>
                             <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <!--
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Tomar pedidos</a>
-                                    -->
+
                                     <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Ver pedidos</a>
                                 </nav>
                             </div>
@@ -122,8 +106,10 @@
                             </a>
                             <div class="collapse" id="pagesCollapseReportes" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.tomaPedidos') }}">Reporte diario</a> {{--reportesD --}}
-                                    <a class="nav-link" href="{{ route('plataforma.ventas.indexOnline') }}">Reporte mensual</a> {{--reportesM --}}
+                                    <a class="nav-link" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#modalReporteDiario">Reporte diario</a> {{--reportesD --}}
+                                    <a class="nav-link" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#modalReporteMensual">Reporte mensual</a> {{--reportesM --}}
                                 </nav>
                             </div>
                         </nav>
@@ -192,6 +178,104 @@
         </footer>
     </div>
 </div>
+<!-- Modal Reporte Mensual-->
+<div class="modal fade" id="modalReporteMensual" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Reporte Mensual</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('ventas.reporteMensual') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <label for="mes">Mes:</label>
+                                <div class="col-md-12">
+                                    <select class="form-select" id="mes" name="mes">
+                                        <option selected value="">Seleccione mes...</option>
+                                            <option value="01">Enero</option>
+                                            <option value="02">Febrero</option>
+                                            <option value="03">Marzo</option>
+                                            <option value="04">Abril</option>
+                                            <option value="05">Mayo</option>
+                                            <option value="06">Junio</option>
+                                            <option value="07">Julio</option>
+                                            <option value="08">Agosto</option>
+                                            <option value="09">Septiembre</option>
+                                            <option value="10">Octubre</option>
+                                            <option value="11">Noviembre</option>
+                                            <option value="12">Diciembre</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="mes">Año:</label>
+                                <div class="col-md-12">
+                                    <select class="form-select" id="anio" name="anio">
+                                        <option selected value="">Seleccione año...</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                            <option value="2031">2031</option>
+                                            <option value="2032">2032</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info">Crear reporte</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal Reporte Diario-->
+<div class="modal fade" id="modalReporteDiario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Reporte Diario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('ventas.reporteMensual') }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <label for="mes">Seleccione dia a consultar:</label>
+                                <div class="col-md-12">
+                                    <input type="date" name="fecha" id="fecha"max="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info">Crear reporte</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="{{ asset('adminlte/js/scripts.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>

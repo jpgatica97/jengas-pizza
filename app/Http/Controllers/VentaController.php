@@ -17,6 +17,7 @@ use App\Services\CarritoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
@@ -77,6 +78,30 @@ class VentaController extends Controller
     }
 
     //Función que almacena una nueva venta presencial
+    public function ventaLocal(){
+        $fecha = Carbon::parse(Carbon::now());
+        $estado = "creacion";
+        $neto = 0;
+        $iva = 0;
+        $total = 0;
+        $observaciones = "-";
+        $medio_venta = "presencial";
+        $metodo_pago = "-";
+        $rut_cliente = Auth::user()->rut;
+        $venta = Venta::create([
+            'fecha' => $fecha,
+            'estado' => $estado,
+            'neto' => $neto,
+            'iva' => $iva,
+            'total' => $total,
+            'observaciones' => $observaciones,
+            'medio_venta' => $medio_venta,
+            'metodo_pago' => $metodo_pago,
+            'rut_cliente' =>$rut_cliente,
+        ]);
+        return redirect()->route('plataforma.ventas.create', ['venta' => $venta->id,]);
+    }
+
     public function store(VentaRequest $request)
     {
 
@@ -243,6 +268,19 @@ class VentaController extends Controller
             'venta' => $venta,
         ]);
         cookie()->delete();
+    }
+    public function reporteMensual(Request $request){
+        $ventas = Venta::join("promociones_ventas", "ventas.id","=", "promociones_ventas.id_venta")->whereMonth('ventas.fecha', request()->mes)->whereYear('ventas.fecha', request()->anio)->get();
+        $mes = request()->mes;
+        $anio = request()->anio;
+        //dd($ventas);
+        //$data = ['ventas' => $ventas, 'mes' => $mes , 'anio' => $anio];
+        $data = ['mes' => $mes , 'anio' => $anio];
+        $pdf = Pdf::loadView('plataforma.pdf.reporteM', $data);
+        return $pdf->download('Reporte_mensual_'.$mes.'-'.$anio.'.pdf');
+    }
+    public function reporteDiario(Request $request){
+
     }
 
 }

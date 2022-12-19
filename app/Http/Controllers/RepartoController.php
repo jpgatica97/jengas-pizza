@@ -42,10 +42,15 @@ class RepartoController extends Controller
         ]);
     }
     public function store(RepartoRequest $request)
-    {
+    {   //Venta a revisar
+        $ventaRevisar = Venta::where("id", request()->id_venta)->get('estado');
 
-        $reparto = Reparto::create($request->validated());
-        $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "en reparto"]);
+        if($ventaRevisar == "online"){
+            $reparto = Reparto::create($request->validated());
+            $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "en reparto"]);
+        }else{
+            $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "finalizado"]);
+        }
         return redirect()->back()->with('reparto', 'ok');
     }
 

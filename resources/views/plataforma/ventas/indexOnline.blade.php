@@ -28,7 +28,10 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                         @if ($venta->estado != "creacion")
                         <tr>
                             <td>{{$venta->id}}</td>
-                            <td>{{$venta->fecha}}</td>
+                            <td>@php
+
+                                echo \Carbon\Carbon::parse($venta->fecha)->format('d-m-Y H:i');
+                            @endphp</td>
                             <td>{{$venta->metodo_pago}}</td>
                             <td>{{$venta->estado}}</td>
                             <td>{{$venta->total}}</td>

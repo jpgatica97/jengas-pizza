@@ -2,9 +2,10 @@
 
 @section('content')
     <div class="container">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h2>Comanda</h2>
+        <div class="card shadow-sm" style="background-color: rgba(215,215,215,0.1);
+        background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5))">
+            <div class="card-header" style="color: white; background-color: black">
+                <h2 style="text-align: center">Comanda</h2>
             </div>
             <div class="card-body">
                 <ul class="list-group">
@@ -34,9 +35,12 @@
                     </li>
 
                 </ul>
+                <div class="container">
+                    <h3><strong>Observaciones:</strong> {{$comanda->venta->observaciones}}</h3>
+                </div>
             </div>
 
-        <form class="d-inline form-finalizar-com" action="{{route('plataforma.comandas.finalizar', [
+        <form class="d-inline form-finalizar-com" style="text-align: center" action="{{route('plataforma.comandas.finalizar', [
             'comanda' => $comanda->id])}}" method="post">
             @method('PUT')
             @csrf

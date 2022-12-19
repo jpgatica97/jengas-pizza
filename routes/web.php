@@ -66,7 +66,8 @@ Route::post('plataforma/ventas/insertar', [\App\Http\Controllers\VentaController
 Route::delete('plataforma/ventas/ep/{promo_venta}', [\App\Http\Controllers\VentaController::class, 'eliminarP'])->name('plataforma.ventas.eliminarP');
 Route::delete('plataforma/ventas/{venta}', [\App\Http\Controllers\VentaController::class, 'destroy'])->name('plataforma.ventas.destroy');
 Route::get('boletaV/{venta}', [\App\Http\Controllers\VentaController::class, 'boleta'])->name('plataforma.ventas.boleta');
-
+Route::get('plataforma/ventaLocal',[\App\Http\Controllers\VentaController::class, 'ventaLocal'])->name('plataforma.ventas.ventaLocal');
+Route::post('plataforma/ventas/reporteMensual', [\App\Http\Controllers\VentaController::class, 'reporteMensual'])->name('ventas.reporteMensual');
 //Rutas de comandas
 Route::get('plataforma/comandas',[\App\Http\Controllers\ComandaController::class, 'index'])->name('plataforma.comandas.index');
 Route::get('plataforma/comandas/create', [\App\Http\Controllers\ComandaController::class, 'create'])->name('plataforma.comandas.create');
