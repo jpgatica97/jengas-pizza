@@ -251,15 +251,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">Crear Reporte Diario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('ventas.reporteMensual') }}" method="post">
+            <form action="{{ route('ventas.reporteDiario') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <label for="mes">Seleccione dia a consultar:</label>
+                                <label for="fecha">Seleccione dia a consultar:</label>
                                 <div class="col-md-12">
-                                    <input type="date" name="fecha" id="fecha"max="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
+                                    <input type="date" class="form-control" name="fecha" id="fecha"max="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
                                 </div>
                             </div>
 
@@ -275,7 +275,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="{{ asset('adminlte/js/scripts.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -283,6 +282,27 @@
 <script src="{{ asset('adminlte/demo/chart-bar-demo.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="{{ asset('adminlte/js/datatables-simple-demo.js') }}"></script>
+
 @yield('js')
+@if(session('fueraPeriodo') == 'fuera')
+           <script>
+               Swal.fire(
+                   'Error al generar informe',
+                   'El periodo seleccionado no tiene ventas registradas',
+                   'error'
+               )
+           </script>
+
+@endif
+@if(session('fueraFecha') == 'fuera')
+           <script>
+               Swal.fire(
+                   'Error al generar informe',
+                   'El día seleccionado NO posee ventas registradas',
+                   'error'
+               )
+           </script>
+
+@endif
 </body>
 </html>

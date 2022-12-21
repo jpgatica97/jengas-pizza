@@ -21,6 +21,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
+use function PHPUnit\Framework\isEmpty;
+
 class VentaController extends Controller
 {
     public $carritoService;
@@ -270,16 +272,96 @@ class VentaController extends Controller
         cookie()->delete();
     }
     public function reporteMensual(Request $request){
-        $ventas = Venta::join("promociones_ventas", "ventas.id","=", "promociones_ventas.id_venta")->whereMonth('ventas.fecha', request()->mes)->whereYear('ventas.fecha', request()->anio)->get();
         $mes = request()->mes;
         $anio = request()->anio;
+        $cantProdVentas = DB::table('ventas as a')
+        ->join('promociones_ventas as b', 'b.id_venta', '=', 'a.id')
+        ->join('promociones as c', 'b.codigo_promocion', '=', 'c.codigo')
+        ->where('a.estado', '=', 'finalizado')
+        ->whereMonth('a.fecha', request()->mes)->select('c.nombre')
+        ->selectRaw('count(c.nombre) as veces')->groupBy('c.nombre')
+        ->get();
+
+        $cantVentas = DB::table('ventas as a')
+        ->where('a.estado', '=', 'finalizado')
+        ->whereMonth('a.fecha', request()->mes)
+        ->whereYear('a.fecha', request()->anio)
+        ->selectRaw("DATE_FORMAT(a.fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("count(DATE_FORMAT(a.fecha, '%d-%m-%Y')) as veces")->groupBy("dia")
+        ->get();
+
+        $cantPresencial = DB::table('ventas as a')
+        ->where('a.estado', '=', 'finalizado')
+        ->where('a.medio_venta', '=', 'presencial')
+        ->whereMonth('a.fecha', request()->mes)
+        ->whereYear('a.fecha', request()->anio)
+        ->selectRaw('count(a.medio_venta) as veces')->groupBy('a.medio_venta')
+        ->get();
+
+        $cantOnline = DB::table('ventas as a')
+        ->where('a.estado', '=', 'finalizado')
+        ->where('a.medio_venta', '=', 'online')
+        ->whereMonth('a.fecha', request()->mes)
+        ->whereYear('a.fecha', request()->anio)
+        ->selectRaw('count(a.id) as veces')->groupBy('a.medio_venta')
+        ->get();
+
+        $ventas = Venta::where("estado", "finalizado")
+        ->whereMonth('fecha', request()->mes)
+        ->whereYear('fecha', request()->anio)->get();
         //dd($ventas);
-        //$data = ['ventas' => $ventas, 'mes' => $mes , 'anio' => $anio];
-        $data = ['mes' => $mes , 'anio' => $anio];
-        $pdf = Pdf::loadView('plataforma.pdf.reporteM', $data);
-        return $pdf->download('Reporte_mensual_'.$mes.'-'.$anio.'.pdf');
+        $data = ['promosCantidad' => $cantProdVentas, 'cantVentas' => $cantVentas,'cantOnline' => $cantOnline,'cantPresencial' => $cantPresencial, 'ventas' => $ventas, 'mes' => $mes , 'anio' => $anio];
+
+        if(isset($cantProdVentas[0]->veces)){
+            $pdf = Pdf::loadView('plataforma.pdf.reporteM', $data);
+            return $pdf->download('Reporte_mensual_'.$mes.'-'.$anio.'.pdf');
+        }else{
+            return redirect()->back()->with('fueraPeriodo', 'fuera');
+        }
     }
+
     public function reporteDiario(Request $request){
+        $fecha = request()->fecha;
+
+        $cantProdVentas = DB::table('ventas as a')
+        ->join('promociones_ventas as b', 'b.id_venta', '=', 'a.id')
+        ->join('promociones as c', 'b.codigo_promocion', '=', 'c.codigo')
+        ->where('a.estado', '=', 'finalizado')
+        ->whereDate('a.fecha', request()->fecha)->select('c.nombre')
+        ->selectRaw('count(c.nombre) as veces')->groupBy('c.nombre')
+        ->get();
+
+        $cantVentas = DB::table('ventas as a')
+        ->where('a.estado', '=', 'finalizado')
+        ->whereDate('a.fecha', request()->fecha)
+        ->selectRaw("DATE_FORMAT(a.fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("count(DATE_FORMAT(a.fecha, '%d-%m-%Y')) as veces")->groupBy("dia")
+        ->get();
+
+        $cantPresencial = DB::table('ventas as a')
+        ->where('a.estado', '=', 'finalizado')
+        ->where('a.medio_venta', '=', 'presencial')
+        ->whereDate('a.fecha', request()->fecha)
+        ->selectRaw('count(a.medio_venta) as veces')->groupBy('a.medio_venta')
+        ->get();
+
+        $cantOnline = DB::table('ventas')
+        ->where('estado', '=', 'finalizado')
+        ->where('medio_venta', '=', 'online')
+        ->whereDate('fecha', request()->fecha)
+        ->selectRaw('count(id) as veces')->groupBy('medio_venta')
+        ->get();
+
+        $ventas = Venta::where("estado", "finalizado")->whereDate('fecha', request()->fecha)->get();
+        //dd($cantPresencial);
+        $dia = Carbon::parse(request()->fecha)->format('d-m-Y');
+        $data = ['promosCantidad' => $cantProdVentas, 'cantVentas' => $cantVentas,'cantOnline' => $cantOnline,'cantPresencial' => $cantPresencial, 'ventas' => $ventas, 'dia' => $dia , ];
+        if(isset($cantProdVentas[0]->veces)){
+            $pdf = Pdf::loadView('plataforma.pdf.reporteD', $data);
+            return $pdf->download('Reporte_diario_'.$dia.'.pdf');
+        }else{
+            return redirect()->back()->with('fueraFecha', 'fuera');
+        }
 
     }
 
