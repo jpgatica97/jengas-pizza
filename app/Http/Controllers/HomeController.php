@@ -6,6 +6,7 @@ use App\Http\Requests\UsuarioHabilitarRequest;
 use App\Http\Requests\UsuarioRequest;
 use App\Models\Producto;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,12 +30,74 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $fecha = Carbon::parse(Carbon::now())->format('Y-m-d');
+        $mes = Carbon::parse($fecha)->format('m');
+        $anio = Carbon::parse($fecha)->format('Y');
+
+        $cantVentasMes = DB::table('ventas')
+        ->selectRaw("DATE_FORMAT(fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("count(DATE_FORMAT(fecha, '%d-%m-%Y')) as veces")
+        ->where('estado', '=', 'finalizado')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->groupBy("dia")
+        ->get();
+
+        $cantVentasMesOnline = DB::table('ventas')
+        ->selectRaw("DATE_FORMAT(fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("count(DATE_FORMAT(fecha, '%d-%m-%Y')) as veces")
+        ->where('estado', '=', 'finalizado')
+        ->where('medio_venta', '=', 'online')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->groupBy("dia")
+        ->get();
+
+        $cantVentasMesPresencial = DB::table('ventas')
+        ->selectRaw("DATE_FORMAT(fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("count(DATE_FORMAT(fecha, '%d-%m-%Y')) as veces")
+        ->where('estado', '=', 'finalizado')
+        ->where('medio_venta', '=', 'presencial')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->groupBy("dia")
+        ->get();
+
+        $montoVentasMes = DB::table('ventas')
+        ->where('estado', '=', 'finalizado')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->selectRaw("DATE_FORMAT(fecha, '%d-%m-%Y') as dia")
+        ->selectRaw("sum(total) as total")->groupBy("dia")
+        ->get();
+
+        $cantPresencial = DB::table('ventas')
+        ->where('estado', '=', 'finalizado')
+        ->where('medio_venta', '=', 'presencial')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->selectRaw('count(medio_venta) as veces')->groupBy('medio_venta')
+        ->get();
+
+        $cantOnline = DB::table('ventas')
+        ->where('estado', '=', 'finalizado')
+        ->where('medio_venta', '=', 'online')
+        ->whereMonth('fecha', $mes)
+        ->whereYear('fecha', $anio)
+        ->selectRaw('count(id) as veces')->groupBy('medio_venta')
+        ->get();
+
+        //dd($cantVentasMesOnline);
         if (Auth::user()->rol == 'cliente') {
             return view('inicio.inicio')->with([
                 'promociones' => DB::table('promociones')->get(),
             ]);
         } else {
-            return view('plataforma.inicio');
+            return view('plataforma.inicio')->with([
+                'cantVentasMes' => $cantVentasMes, 'cantOnline' => $cantOnline, 'cantPresencial' => $cantPresencial,
+                'montoVentasMes' => $montoVentasMes, 'cantVentasMesOnline' => $cantVentasMesOnline, 'cantVentasMesPresencial' => $cantVentasMesPresencial,
+
+            ]);
         }
 
     }

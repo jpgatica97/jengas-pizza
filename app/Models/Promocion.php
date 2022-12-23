@@ -20,8 +20,8 @@ class Promocion extends Model
 
     ];
     public function productos()
-    { //relacion con id personalizada;
-        return $this->belongsToMany(Producto::class, 'codigo_prod');
+    {
+        return $this->belongsToMany(Producto::class)->withPivot('cantidad');
     }
     public function ventas()
     { //relacion con id personalizada;
@@ -30,5 +30,9 @@ class Promocion extends Model
     public function carritos()
     {//RElacion muchos a muchos
         return $this->belongsToMany(Carrito::class)->withPivot('cantidad');
+    }
+    public function getTotal()
+    {
+        return $this->productos->pluck('total')->sum();
     }
 }

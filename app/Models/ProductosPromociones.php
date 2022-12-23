@@ -11,11 +11,7 @@ class ProductosPromociones extends Model
     protected $table = "productos_promociones";
     protected $fillable = [
         'codigo_producto',
+        'cantidad',
         'codigo_promocion',
-        'email',
-        'password',
-        'direccion',
-        'rol'
-
     ];
 }

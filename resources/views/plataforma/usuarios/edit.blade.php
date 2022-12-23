@@ -13,9 +13,9 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                         <div class="card-body">
                             <div class="row mb-3">
 
-                                <label for="nombre" class="col-md-4 col-form-label text-md-end">Nombre</label>
+                                <label for="nombre_completo" class="col-md-4 col-form-label text-md-end">Nombre</label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="nombre"
+                                    <input type="text" class="form-control" name="nombre_completo"
                                            value="{{ old('nombre_completo') ?? $usuario->nombre_completo }}">
                                 </div>
                             </div>
@@ -33,15 +33,23 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             </div>
                             <div class="row mb-3">
 
-                                <label for="descripcion" class="col-md-4 col-form-label text-md-end">Email</label>
+                                <label for="telefono" class="col-md-4 col-form-label text-md-end">Teléfono</label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="email"
+                                    <input type="text" class="form-control" name="telefono"
+                                           value="{{ old('telefono') ?? $usuario->telefono }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+
+                                <label for="email" class="col-md-4 col-form-label text-md-end">Email</label>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="email"
                                            value="{{ old('email') ?? $usuario->email }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
 
-                                <label for="precio" class="col-md-4 col-form-label text-md-end">Dirección</label>
+                                <label for="direccion" class="col-md-4 col-form-label text-md-end">Dirección</label>
                                 <div class="col-md-6">
                                     <input type="text"  class="form-control" name="direccion"
                                            value="{{ old('direccion') ?? $usuario->direccion }}">
@@ -49,7 +57,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             </div>
                             <div class="row mb-3">
 
-                                <label for="stock" class="col-md-4 col-form-label text-md-end">Habilitado?</label>
+                                <label for="habilitacion" class="col-md-4 col-form-label text-md-end">Habilitado?</label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" name="habilitacion" disabled
                                            value="{{ old('habilitacion') ?? $usuario->habilitacion }}">

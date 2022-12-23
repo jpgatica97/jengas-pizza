@@ -249,11 +249,11 @@ class VentaController extends Controller
     }
     public function Boleta(Venta $venta)
     {
-        $promos = PromocionesVentas::where("id_venta", $venta->id);
+        $promos = PromocionesVentas::where("id_venta", $venta->id)->get();
         $promociones = Promocion::all();
         $data = ['ventas' => $venta, 'promos' => $promos , 'promociones' => $promociones];
 
-        $pdf = Pdf::loadView('plataforma.boleta.export', $data);
+        $pdf = Pdf::loadView('plataforma.ventas.boleta', $data);
         return $pdf->download('Boleta.pdf');
     }
     public function webpay(Venta $venta)
@@ -265,9 +265,9 @@ class VentaController extends Controller
     }
     public function confirmacion(Venta $venta)
     {
-        $venta = Venta::where("id", $venta->id)->update(["estado"=> "pagado"]);
+        $ventas = Venta::where("id", $venta->id)->update(["estado"=> "pagado"]);
         return view('inicio.confirmar')->with([
-            'venta' => $venta,
+            'venta' => $ventas,
         ]);
         cookie()->delete();
     }

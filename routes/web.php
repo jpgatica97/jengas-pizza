@@ -20,9 +20,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'inicio'])->name('i
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/plataforma', function () {
-    return view('plataforma.inicio');
-})->name('plataforma');
+Route::get('/plataforma', [App\Http\Controllers\HomeController::class, 'index'])->name('plataforma');
 
 //Rutas de Productos
 Route::get('plataforma/productos',[\App\Http\Controllers\ProductoController::class, 'index'])->name('plataforma.productos.index');
@@ -88,7 +86,7 @@ Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Contro
 Route::delete('plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'destroy'])->name('plataforma.repartos.destroy');
 Route::match(['put', 'patch'],'plataforma/repartos/{reparto}', [\App\Http\Controllers\RepartoController::class, 'finalizar'])->name('plataforma.repartos.finalizar');
 
-//Rutas del carrito
+//Rutas del carrito de ventas
 Route::post('plataforma/promociones/{promocion}/carrito', [\App\Http\Controllers\PromocionCarritoController::class, 'store'])->name('promociones.carritos.store');
 Route::delete('plataforma/promociones/{promocion}/carrito/{carrito}', [\App\Http\Controllers\PromocionCarritoController::class, 'destroy'])->name('promociones.carritos.destroy');
 Route::get('carrito',[\App\Http\Controllers\CarritoController::class, 'index'])->name('carritos.index');
@@ -96,3 +94,12 @@ Route::get('ventas/create', [\App\Http\Controllers\VentaController::class, 'crea
 Route::post('ventas/', [\App\Http\Controllers\VentaController::class, 'storeO'])->name('ventasO.store');
 Route::get('ventas/webpay/{venta}', [\App\Http\Controllers\VentaController::class, 'webpay'])->name('ventasO.webpay');
 Route::get('ventas/confirmacion/{venta}', [\App\Http\Controllers\VentaController::class, 'confirmacion'])->name('ventasO.confirmacion');
+
+//Rutas de los ingredientes (Productos y Promoción)
+Route::get('plataforma/ingredientes',[\App\Http\Controllers\ProductoPromocionController::class, 'index'])->name('plataforma.ingredientes.index');
+Route::get('plataforma/ingredientes/create', [\App\Http\Controllers\ProductoPromocionController::class, 'create'])->name('plataforma.ingredientes.create');
+Route::post('plataforma/ingredientes/{producto}/promocion', [\App\Http\Controllers\ProductoPromocionController::class, 'store'])->name('ingredientes.store');
+Route::get('plataforma/ingredientes/{producto}', [\App\Http\Controllers\ProductoPromocionController::class, 'show'] )->name('plataforma.ingredientes.show');
+Route::get('plataforma/ingredientes/{producto}/edit', [\App\Http\Controllers\ProductoPromocionController::class, 'edit'])->name('plataforma.ingredientes.edit');
+Route::match(['put', 'patch'],'plataforma/ingredientes/{producto}', [\App\Http\Controllers\ProductoPromocionController::class, 'update'])->name('plataforma.ingredientes.update');
+Route::delete('plataforma/ingredientes/{producto}/promocion/{promocion}', [\App\Http\Controllers\ProductoPromocionController::class, 'destroy'])->name('plataforma.ingredientes.destroy');

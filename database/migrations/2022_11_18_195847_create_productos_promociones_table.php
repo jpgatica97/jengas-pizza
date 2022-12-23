@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('productos_promociones', function (Blueprint $table) {
             $table->integer('codigo_producto')->unsigned();
             $table->integer('codigo_promocion')->unsigned();
+            $table->integer('cantidad');
 
             $table->foreign('codigo_producto')->references('codigo')->on('productos');
             $table->foreign('codigo_promocion')->references('codigo')->on('promociones');

@@ -27,6 +27,7 @@ class UsuarioRequest extends FormRequest
             'nombre_completo' => ['required','max:255'],
             'email' => ['required'],
             'rol' => ['required'],
+            'telefono' => ['required'],
             'direccion' => ['required', 'max:1000'],
             'habilitacion' => ['required'],
         ];

@@ -38,6 +38,8 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.ventas.show', [
                                     'venta' => $venta->id]) }}"><i class="fas fa-eye"></i></a>
+                                    <a class="btn btn-primary" href="{{ route('plataforma.ventas.boleta', [
+                                        'venta' => $venta->id]) }}"><i class="far fa-print"></i>Boleta </a>
                                 @if ($venta->estado == "pagado")
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#modalComanda{{ $venta->id }}"><i
