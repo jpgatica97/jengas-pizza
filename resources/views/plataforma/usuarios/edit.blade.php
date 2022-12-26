@@ -1,9 +1,9 @@
 @extends('layouts.plataforma')
 
 @section('content')
-    <form action="{{ route('plataforma.usuarios.update', ['usuario' => $usuario->rut]) }}" method="post">
+    <form action="{{ route('usuarios.update', ['usuario' => $usuario->rut]) }}" method="POST">
         @csrf
-        @method('put')
+        @method('PUT')
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -63,7 +63,6 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                            value="{{ old('habilitacion') ?? $usuario->habilitacion }}">
                                 </div>
                             </div>
-
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary btn-lg">Actualizar Usuario</button>
                             </div>

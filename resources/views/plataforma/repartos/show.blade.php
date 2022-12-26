@@ -6,6 +6,8 @@
             <div class="card-header">
                 <h2>Reparto de pedido de {{$reparto->venta->cliente->nombre_completo}}
                 </h2>
+                <h3>Seguimiento n° {{$reparto->venta->id}}
+                </h3>
             </div>
             <div class="card-body">
                 <ul class="list-group">
@@ -37,7 +39,7 @@
                 </ul>
             </div>
             <h4 style="text-align: center">Dirección de entrega: <strong>{{$reparto->venta->cliente->direccion}}</strong></h4>
-
+            <h4 style="text-align: center">Teléfono del cliente: <strong>{{$reparto->venta->cliente->telefono}}</strong></h4>
         <div class="container" style="text-align: center">
             <form class="d-inline form-finalizar-com" action="{{route('plataforma.repartos.finalizar', [
             'reparto' => $reparto->id])}}" method="post">

@@ -9,6 +9,8 @@ use App\Http\Requests\UsuarioRequest;
 use App\Http\Requests\VentaGuardarRequest;
 use App\Http\Requests\VentaRequest;
 use App\Models\Comanda;
+use App\Models\Producto;
+use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use App\Models\PromocionesVentas;
 use App\Models\User;
@@ -29,8 +31,9 @@ class VentaController extends Controller
     //Configura la autenticación para acceder a este módulo
     public function __construct(CarritoService $carritoService)
     {
-        $this->middleware('auth')->except(['createO', 'noRegistrado', 'storeO']);
+        $this->middleware('auth')->except(['createO', 'noRegistrado', 'storeO', 'confirmacion', 'seguimiento']);
         $this->carritoService = $carritoService;
+
     }
 
 
@@ -161,13 +164,7 @@ class VentaController extends Controller
         $venta->update($request->validated());
         return redirect()->route('plataforma.ventas.index');
     }
-    //Función que toma un pedido para enviarlo a comanda
-    public function tomar(ComandaRequest $request, Venta $venta)
-    {
-        $venta->update($request->validated());
-        $comanda = Comanda::create($request->validated());
-        return redirect()->route('plataforma.ventas.indexOnline');
-    }
+
     //Función que actualiza los valores de una venta y los almacena
     public function guardar(VentaGuardarRequest $request, Venta $venta)
     {
@@ -259,6 +256,7 @@ class VentaController extends Controller
     public function webpay(Venta $venta)
     {
         $carrito = $this->carritoService->getFromCookie();
+        $this->carritoService->getFromCookie()->promociones()->detach();
         return view('inicio.webpayFalso')->with([
             'venta' => $venta,
         ]);
@@ -267,10 +265,20 @@ class VentaController extends Controller
     {
         $ventas = Venta::where("id", $venta->id)->update(["estado"=> "pagado"]);
         return view('inicio.confirmar')->with([
-            'venta' => $ventas,
+            'venta' => $venta,
         ]);
-        cookie()->delete();
+
     }
+
+    public function seguimiento(Venta $venta)
+    {
+        $promos = PromocionesVentas::where('id_venta', $venta->id)->get();
+        return view('inicio.seguimiento')->with([
+            'venta' => $venta, 'promos' => $promos,
+        ]);
+
+    }
+
     public function reporteMensual(Request $request){
         $mes = request()->mes;
         $anio = request()->anio;
@@ -364,5 +372,6 @@ class VentaController extends Controller
         }
 
     }
+
 
 }

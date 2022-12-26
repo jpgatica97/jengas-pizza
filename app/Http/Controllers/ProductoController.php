@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductoRequest;
+use App\Http\Requests\VisibleRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,5 +65,16 @@ class ProductoController extends Controller
     public function destroy(Producto $producto){
         $producto->delete();
         return redirect()->route('plataforma.productos.index')->with('eliminar','ok');
+    }
+    public function habilitar(VisibleRequest $request, Producto $producto){
+
+        $producto->update($request->validated());
+        return redirect()->route('plataforma.productos.index')->with('habilitacion', 'ok');
+    }
+
+    public function deshabilitar(VisibleRequest $request, Producto $producto){
+
+        $producto->update($request->validated());
+        return redirect()->route('plataforma.productos.index')->with('deshabilitacion', 'ok');
     }
 }

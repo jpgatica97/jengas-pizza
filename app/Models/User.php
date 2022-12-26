@@ -28,6 +28,7 @@ class User extends Authenticatable
         'password',
         'direccion',
         'rol',
+        'telefono',
         'habilitacion'
 
     ];

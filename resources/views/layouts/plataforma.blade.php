@@ -92,6 +92,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ route('plataforma.productos.index') }}">Ver inventario</a>
                             <a class="nav-link" href="{{ route('plataforma.promociones.index') }}">Ver promociones</a>
+                            <a class="nav-link" href="{{ route('plataforma.ingredientes.index') }}">Asociar inventario a pomociones</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -145,6 +146,7 @@
                     </a>
                     <div class="collapse" id="collapseComandas" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('plataforma.comandas.tomar') }}">Tomar comandas</a>
                             <a class="nav-link" href="{{ route('plataforma.comandas.index') }}">Ver comandas</a>
 
                         </nav>

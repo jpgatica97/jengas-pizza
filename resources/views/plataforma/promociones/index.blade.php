@@ -22,6 +22,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                         <th>Descripción</th>
                         <th>Precio</th>
                         <th>Categoria</th>
+                        <th>Visibilidad</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
@@ -33,6 +34,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             <td>{{$promocion->descripcion}}</td>
                             <td>${{$promocion->precio}}</td>
                             <td>{{$promocion->categoria}}</td>
+                            <td>{{$promocion->visible}}</td>
                             <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.promociones.show', [
                                     'promocion' => $promocion->codigo]) }}"><i class="fas fa-eye"></i></a>
@@ -40,6 +42,21 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                     'promocion' => $promocion->codigo]) }}"><i class="fas fa-edit"></i></a>
                                 <button type="submit" class="btn btn-danger"data-bs-toggle="modal"
                                         data-bs-target="#modalEliminar{{ $promocion->codigo }}"><i class="fas fa-trash-alt"></i></button>
+                                    @if($promocion->visible=="visible")
+                                <form class="deshabil" action="{{route('plataforma.promociones.deshabilitar', ['promocion' => $promocion->codigo]) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" class="form-control" name="visible" value="invisible" required>
+                                    <button type="submit" class="btn btn-danger"> <i class="fas fa-toggle-off"></i> Deshabilitar </button>
+                                </form>
+                            @elseif($promocion->visible=="invisible")
+                                <form class="habil" action="{{route('plataforma.promociones.habilitar', ['promocion' => $promocion->codigo]) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" class="form-control" name="visible" value="visible" required>
+                                    <button type="submit" class="btn btn-success"><i class="fas fa-toggle-on"></i> Habilitar</button>
+                                </form>
+                            @endif
 
                             </td>
                         </tr>

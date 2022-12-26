@@ -15,6 +15,7 @@ class Producto extends Model
         'descripcion',
         'stock',
         'precio',
+        'unidad_medida',
         'visible'
 
     ];

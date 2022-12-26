@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UsuarioHabilitarRequest;
 use App\Http\Requests\UsuarioRequest;
 use App\Models\Producto;
+use App\Models\ProductosPromociones;
+use App\Models\Promocion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +23,15 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('inicio');
+        //revisa si hay productos con 1 de stock, en caso de que existan,
+        //los ocultan las promociones que utilizan ese producto
+        $prod = Producto::where('stock', '<=', 1)->get();
+        foreach($prod as $pro){
+            $pps = ProductosPromociones::where('codigo_producto',$pro->codigo)->get();
+            foreach($pps as $pp){
+                DB::update("update promociones set visible = 'invisible' where codigo = ".$pp->codigo_promocion);
+            }
+        }
     }
 
     /**
@@ -87,6 +98,24 @@ class HomeController extends Controller
         ->selectRaw('count(id) as veces')->groupBy('medio_venta')
         ->get();
 
+        $cantProdVentas = DB::table('ventas as a')
+        ->join('promociones_ventas as b', 'b.id_venta', '=', 'a.id')
+        ->join('promociones as c', 'b.codigo_promocion', '=', 'c.codigo')
+        ->where('a.estado', '=', 'finalizado')
+        ->whereMonth('a.fecha', request()->mes)->select('c.nombre')
+        ->selectRaw('count(c.nombre) as veces')->groupBy('c.nombre')->orderByDesc('veces')
+        ->get();
+        $prod = Producto::where('stock', '<=', 1)->get();
+        $deshabilitaciones = false;
+        foreach($prod as $pro){
+            $deshabilitaciones = true;
+        }
+        $promo = Promocion::where('visible', 'invisible')->get();
+        $invisibles = false;
+        foreach($promo as $pro){
+            $invisibles = true;
+        }
+
         //dd($cantVentasMesOnline);
         if (Auth::user()->rol == 'cliente') {
             return view('inicio.inicio')->with([
@@ -96,7 +125,7 @@ class HomeController extends Controller
             return view('plataforma.inicio')->with([
                 'cantVentasMes' => $cantVentasMes, 'cantOnline' => $cantOnline, 'cantPresencial' => $cantPresencial,
                 'montoVentasMes' => $montoVentasMes, 'cantVentasMesOnline' => $cantVentasMesOnline, 'cantVentasMesPresencial' => $cantVentasMesPresencial,
-
+                'cantProdVentas' => $cantProdVentas, 'deshabilitaciones' => $deshabilitaciones, 'invisibles' => $invisibles,
             ]);
         }
 
@@ -137,13 +166,10 @@ class HomeController extends Controller
 
     public function update(UsuarioRequest $request, User $usuario)
     {
-        if (Auth::user()->rol == 'cliente') {
-            return view('inicio.inicio')->with([
-                'promociones' => DB::table('promociones')->get(),
-            ]);
-        }
-        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['nombre_completo' => request()->nombre_completo], ['email' =>request()->email], ['rol' => request()->rol], ['direccion'=>request()->direccion], ['habilitacion' => request()->habilitacion ]);
-        return redirect()->route('plataforma.usuarios.index')->with('actualizacion', 'ok');
+        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['ombre_completo' => request()->nombre_completo], ['email' =>request()->email], ['rol' => request()->rol], ['telefono'=>request()->telefono],['direccion'=>request()->direccion], ['habilitacion' => request()->habilitacio]);
+        dd($usuario);
+        return redirect()->back()->with('actualizacion', 'ok');
+
     }
     public function show(User $usuario){
         if (Auth::user()->rol == 'cliente') {

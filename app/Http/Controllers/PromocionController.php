@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PromocionRequest;
+use App\Http\Requests\VisibleRequest;
 use App\Models\Promocion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,9 +61,26 @@ class PromocionController extends Controller
         return redirect()->route('plataforma.promociones.index')->withSuccess('ELa promoción: '.$promocion->nombre.' fué actualizado exitosamente');
     }
 
+    public function deshabilitados()
+    {
+        return view('plataforma.promociones.deshabilitados')->with([
+            'promociones' => Promocion::where('visible', 'invisible')->get(),
+        ]);
+    }
     //Función que elimina una promo
     public function destroy(Promocion $promocion){
         $promocion->delete();
         return redirect()->route('plataforma.promocion.index')->withSuccess('La promocion '.$promocion->nombre.' fué eliminado exitosamente');
+    }
+    public function habilitar(VisibleRequest $request, Promocion $promocion){
+
+        $promocion->update($request->validated());
+        return redirect()->route('plataforma.promociones.index')->with('habilitacion', 'ok');
+    }
+
+    public function deshabilitar(VisibleRequest $request, Promocion $promocion){
+
+        $promocion->update($request->validated());
+        return redirect()->route('plataforma.promociones.index')->with('deshabilitacion', 'ok');
     }
 }

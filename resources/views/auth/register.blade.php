@@ -50,26 +50,26 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
                                 @enderror
                             </div>
                         </div>
-                        @auth()
-                            <div class="row mb-3">
-                                <label class="col-md-4 col-form-label text-md-end" for="rol">Rol</label>
-
-                                <div class="col-md-6">
-                                    <select class="form-select" id="rol" name="rol">
-                                        <option selected value="vendedor">Vendedor/a</option>
-                                        <option value="cocinero">Cocinero/a</option>
-                                        <option value="repartidor">Repartidor/a</option>
-                                        <option value="administrador">Administrador/a</option>
-                                    </select>
-                                </div>
+                        @guest
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input id="rol" type="hidden" class="form-control" name="rol" value="cliente">
                             </div>
+                        </div>
                         @else
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <input id="rol" type="hidden" class="form-control" name="rol" value="cliente">
-                                </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 col-form-label text-md-end" for="rol">Rol</label>
+
+                            <div class="col-md-6">
+                                <select class="form-select" id="rol" name="rol">
+                                    <option selected value="vendedor">Vendedor/a</option>
+                                    <option value="cocinero">Cocinero/a</option>
+                                    <option value="repartidor">Repartidor/a</option>
+                                    <option value="administrador">Administrador/a</option>
+                                </select>
                             </div>
-                        @endauth
+                        </div>
+                        @endguest
 
                         <div class="row mb-3">
                             <label for="telefono" class="col-md-4 col-form-label text-md-end">{{ __('Teléfono') }}</label>

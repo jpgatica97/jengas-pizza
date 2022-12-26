@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('codigo_producto')->unsigned();
             $table->integer('codigo_promocion')->unsigned();
             $table->integer('cantidad');
+            $table->string('unidad_medida');
 
             $table->foreign('codigo_producto')->references('codigo')->on('productos');
             $table->foreign('codigo_promocion')->references('codigo')->on('promociones');

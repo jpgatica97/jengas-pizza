@@ -34,6 +34,9 @@ class CarritoService{
         }
         return 0;
     }
+    public function borrarCarrito(){
+        return Cookie::forget('carrito');
+    }
 }
 
 ?>

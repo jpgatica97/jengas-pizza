@@ -3,7 +3,7 @@
 @section('content')
     <div class="container" style ="background-color: rgba(215,215,215,0.1);
 background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5))">
-        <h1 style="margin-top: 10px">Recetario</h1>
+        <h1 style="margin-top: 10px">Promociones deshabilitadas</h1>
 
         @if ($promociones->isEmpty())
             <div class="alert alert-warning">
@@ -35,8 +35,14 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.ingredientes.show', [
                                     'promocion' => $promocion->codigo]) }}"><i class="fas fa-eye"></i></a>
-                                <a class="btn btn-primary" href="{{ route('plataforma.ingredientes.create', [
-                                    'promocion' => $promocion->codigo]) }}"><i class="fas fa-edit"></i></a>
+                                @if($promocion->visible=="invisible")
+                                <form class="habil" action="{{route('plataforma.promociones.habilitar', ['promocion' => $promocion->codigo]) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" class="form-control" name="visible" value="visible" required>
+                                    <button type="submit" class="btn btn-success"><i class="fas fa-toggle-on"></i> Habilitar</button>
+                                </form>
+                            @endif
                             </td>
                         </tr>
                         @php

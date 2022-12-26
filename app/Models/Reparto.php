@@ -12,7 +12,8 @@ class Reparto extends Model
     protected $fillable = [
         'estado',
         'rut_repartidor',
-        'id_venta'
+        'id_venta',
+        'hora_entrega',
 
     ];
     public function venta()

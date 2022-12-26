@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductoPromocionController extends Controller
 {
@@ -16,7 +18,15 @@ class ProductoPromocionController extends Controller
      */
     public function index(Producto $producto)
     {
-        //
+        $obtenerTotal = DB::table('productos_promociones')
+        ->selectRaw('count(codigo_promocion) as total')
+        ->groupBy('codigo_promocion')
+        ->get();
+        //dd($obtenerTotal);
+        return view('plataforma.ingredientes.index')->with([
+            'promociones' => Promocion::all(),
+            'total' => $obtenerTotal,
+        ]);
     }
 
     /**
@@ -25,9 +35,13 @@ class ProductoPromocionController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function create(Producto $producto)
+    public function create(Promocion $promocion)
     {
-        //
+        return view('plataforma.ingredientes.create')->with([
+            'productos' => Producto::all(),
+            'promocion' =>Promocion::where('codigo' , $promocion->codigo)->get(),
+            'pp' =>ProductosPromociones::where('codigo_promocion', $promocion->codigo)->get(),
+        ]);
     }
 
     /**
@@ -37,9 +51,18 @@ class ProductoPromocionController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Producto $producto)
+    public function store(Request $request, Promocion $promocion)
     {
-        //
+        $ppi = ProductosPromociones::insert([
+            'codigo_promocion' => $promocion->codigo,
+            'cantidad' => request()->cantidad,
+            'codigo_producto' => request()->codigo_producto,
+        ]);
+        $pp = ProductosPromociones::where('codigo_promocion', $promocion->codigo);
+        return redirect()->route('plataforma.ingredientes.create', [
+            'promocion' => $promocion->codigo,
+            'pp' => $pp,
+        ]);
     }
 
     /**
@@ -49,34 +72,13 @@ class ProductoPromocionController extends Controller
      * @param  \App\Models\Promocion  $promocion
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto, Promocion $promocion)
+    public function show(Promocion $promocion)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Producto  $producto
-     * @param  \App\Models\Promocion  $promocion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Producto $producto, Promocion $promocion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Producto  $producto
-     * @param  \App\Models\Promocion  $promocion
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Producto $producto, Promocion $promocion)
-    {
-        //
+        return view('plataforma.ingredientes.show')->with([
+            'productos' => Producto::all(),
+            'promocion' =>Promocion::where('codigo' , $promocion->codigo)->get(),
+            'pp' =>ProductosPromociones::where('codigo_promocion', $promocion->codigo)->get(),
+        ]);
     }
 
     /**
@@ -86,8 +88,9 @@ class ProductoPromocionController extends Controller
      * @param  \App\Models\Promocion  $promocion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto, Promocion $promocion)
+    public function destroy(Promocion $promocion, Producto $producto)
     {
-        //
+        $pp = ProductosPromociones::where('codigo_promocion', $promocion->codigo)->where('codigo_producto', $producto->codigo)->delete();
+        return redirect()->back();
     }
 }

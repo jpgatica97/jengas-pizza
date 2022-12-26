@@ -2,7 +2,28 @@
 
 @section('content')
     <h1 style="margin-left: 10px; color: white;">Panel principal</h1>
-
+    <br>
+   @if ($deshabilitaciones == true)
+    <div class="container">
+        <div class="alert alert-warning" role="alert">
+            <h3>Poco stock de ingrediente</h3>
+            <p>
+                Se ha detectado un producto de inventario con muy poco stock, por lo que se han deshabilitado la venta de ciertas promociones asociadas a este producto.
+                Para revisar inventario, presione <a class="alert-link" href="{{route('plataforma.productos.index')}}">aquí</a>
+                </p>
+        </div>
+    </div>
+   @endif
+   @if ($invisibles == true)
+   <div class="container">
+    <div class="alert alert-danger" role="alert">
+        <h3>Promocion(es) deshabilitada(s)</h3>
+        <p>
+            Se ha detectado una o más promociones deshabilitadas, para revisarlas, presione <a class="alert-link" href="{{ route('plataforma.promociones.deshabilitados')}}">aquí</a> .
+            </p>
+    </div>
+   </div>
+  @endif
     <br>
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
@@ -11,7 +32,11 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>{{$cantPresencial['0']->veces}}</h3>
+                        @if (isset($cantPresencial->first()->veces))
+                            <h3>{{ $cantPresencial->first()->veces }}</h3>
+                        @else
+                            <h3>0</h3>
+                        @endif
 
                         <p>Ventas presenciales</p>
                     </div>
@@ -26,7 +51,11 @@
                 <!-- small box -->
                 <div class="small-box bg-dark">
                     <div class="inner">
-                        <h3>{{$cantOnline['0']->veces}}</h3>
+                        @if (isset($cantOnline->first()->veces))
+                        <h3>{{ $cantOnline->first()->veces }}</h3>
+                        @else
+                        <h3>0</h3>
+                        @endif
 
                         <p>Ventas Online</p>
                     </div>
@@ -42,11 +71,11 @@
                     <div class="inner">
                         @php
                             $totalMes = 0;
-                            foreach ($montoVentasMes as $mv){
-                            $totalMes = $totalMes + $mv->total;
+                            foreach ($montoVentasMes as $mv) {
+                                $totalMes = $totalMes + $mv->total;
                             }
                         @endphp
-                        <h3>${{$totalMes}}</h3>
+                        <h3>${{ $totalMes }}</h3>
 
                         <p>Total recaudado en el mes</p>
                     </div>
@@ -68,7 +97,11 @@
             <div class="card-body">
                 <div class="d-flex">
                     <p class="d-flex flex-column">
-                        <span class="text-bold text-lg">{{($cantOnline['0']->veces + $cantPresencial['0']->veces)}}</span>
+                        @if (isset($cantOnline->first()->veces) && isset($cantPresencial->first()->veces))
+                        <span class="text-bold text-lg">{{ $cantOnline->first()->veces + $cantPresencial->first()->veces }}</span>
+                        @else
+                        <span class="text-bold text-lg">Faltan ventas</span>
+                        @endif
                         <span>Total ventas</span>
                     </p>
                 </div>
@@ -89,6 +122,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <h4>Top productos más vendidos</h4>
     </div>
 @endsection
 @section('js')
@@ -120,127 +156,126 @@
     <!-- overlayScrollbars -->
     <script src="{{ asset('adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <script>
-        $(function () {
-  'use strict'
+        $(function() {
+            'use strict'
 
-  var ticksStyle = {
-    fontColor: '#495057',
-    fontStyle: 'bold'
-  }
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
 
-  var mode = 'index'
-  var intersect = true
-        var $ventasChart = $('#ventas-chart')
-  // eslint-disable-next-line no-unused-vars
-  var ventasChart = new Chart($ventasChart, {
-    data: {
-      labels: [
-        //'18th', '20th', '22nd', '24th', '26th', '28th', '30th'
-        @foreach ($cantVentasMes as $cv)
+            var mode = 'index'
+            var intersect = true
+            var $ventasChart = $('#ventas-chart')
+            // eslint-disable-next-line no-unused-vars
+            var ventasChart = new Chart($ventasChart, {
+                data: {
+                    labels: [
+                        //'18th', '20th', '22nd', '24th', '26th', '28th', '30th'
+                        @foreach ($cantVentasMes as $cv)
 
-            '{{$cv->dia}}',
+                            '{{ $cv->dia }}',
+                        @endforeach
+                    ],
+                    datasets: [{
+                            type: 'line',
+                            data: [
+                                //100, 120, 170, 167, 180, 177, 160
+                                //Cantidad online
 
-        @endforeach
-    ],
-      datasets: [{
-        type: 'line',
-        data: [
-            //100, 120, 170, 167, 180, 177, 160
-            //Cantidad online
+                                @foreach ($cantVentasMes as $c)
+                                    @php
+                                        $cantidad = 0;
+                                    @endphp
+                                    @foreach ($cantVentasMesOnline as $co)
+                                        @if ($co->dia == $c->dia)
+                                            @php
+                                                $cantidad = $co->veces;
 
-            @foreach ($cantVentasMes as $c)
-            @php
-            $cantidad=0;
-            @endphp
-                @foreach ($cantVentasMesOnline as $co)
-                    @if ($co->dia == $c->dia)
-                    @php
-                    $cantidad = $co->veces;
+                                            @endphp
+                                        @endif
+                                    @endforeach
 
-                    @endphp
-                    @endif
-                    @endforeach
+                                    {{ $cantidad }}
+                                    {{ ',' }}
+                                @endforeach
+                            ],
+                            backgroundColor: 'transparent',
+                            borderColor: '#007bff',
+                            pointBorderColor: '#007bff',
+                            pointBackgroundColor: '#007bff',
+                            fill: false
+                            // pointHoverBackgroundColor: '#007bff',
+                            // pointHoverBorderColor    : '#007bff'
+                        },
+                        {
+                            type: 'line',
+                            data: [
+                                //60, 80, 70, 67, 80, 77, 100
+                                @foreach ($cantVentasMes as $c)
+                                    @php
+                                        $cantidad = 0;
+                                    @endphp
+                                    @foreach ($cantVentasMesPresencial as $cp)
+                                        @if ($cp->dia == $c->dia)
+                                            @php
+                                                $cantidad = $cp->veces;
 
-                        {{ $cantidad }}
-                        {{","}}
-            @endforeach
-        ],
-        backgroundColor: 'transparent',
-        borderColor: '#007bff',
-        pointBorderColor: '#007bff',
-        pointBackgroundColor: '#007bff',
-        fill: false
-        // pointHoverBackgroundColor: '#007bff',
-        // pointHoverBorderColor    : '#007bff'
-      },
-      {
-        type: 'line',
-        data: [
-            //60, 80, 70, 67, 80, 77, 100
-            @foreach ($cantVentasMes as $c)
-            @php
-            $cantidad=0;
-            @endphp
-                @foreach ($cantVentasMesPresencial as $cp)
-                    @if ($cp->dia == $c->dia)
-                    @php
-                    $cantidad = $cp->veces;
+                                            @endphp
+                                        @endif
+                                    @endforeach
 
-                    @endphp
-                    @endif
-                    @endforeach
-
-                        {{ $cantidad }}
-                        {{","}}
-
-            @endforeach
-        ],
-        backgroundColor: 'tansparent',
-        borderColor: '#ced4da',
-        pointBorderColor: '#ced4da',
-        pointBackgroundColor: '#ced4da',
-        fill: false
-        // pointHoverBackgroundColor: '#ced4da',
-        // pointHoverBorderColor    : '#ced4da'
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips: {
-        mode: mode,
-        intersect: intersect
-      },
-      hover: {
-        mode: mode,
-        intersect: intersect
-      },
-      legend: {
-        display: false
-      },
-      scales: {
-        yAxes: [{
-          // display: false,
-          gridLines: {
-            display: true,
-            lineWidth: '4px',
-            color: 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks: $.extend({
-            beginAtZero: true,
-            //suggestedMax: 200
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display: true,
-          gridLines: {
-            display: false
-          },
-          ticks: ticksStyle
-        }]
-      }
-    }
-  })
-})
+                                    {{ $cantidad }}
+                                    {{ ',' }}
+                                @endforeach
+                            ],
+                            backgroundColor: 'tansparent',
+                            borderColor: '#ced4da',
+                            pointBorderColor: '#ced4da',
+                            pointBackgroundColor: '#ced4da',
+                            fill: false
+                            // pointHoverBackgroundColor: '#ced4da',
+                            // pointHoverBorderColor    : '#ced4da'
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    hover: {
+                        mode: mode,
+                        intersect: intersect
+                    },
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            // display: false,
+                            gridLines: {
+                                display: true,
+                                lineWidth: '4px',
+                                color: 'rgba(0, 0, 0, .2)',
+                                zeroLineColor: 'transparent'
+                            },
+                            ticks: $.extend({
+                                beginAtZero: true,
+                                //suggestedMax: 200
+                            }, ticksStyle)
+                        }],
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: ticksStyle
+                        }]
+                    }
+                }
+            })
+        })
     </script>
 @endsection

@@ -22,6 +22,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                         <th>Descripción</th>
                         <th>Precio</th>
                         <th>Stock</th>
+                        <th>Visibilidad</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
@@ -33,11 +34,13 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                             <td>{{$producto->descripcion}}</td>
                             <td>${{$producto->precio}}</td>
                             <td>{{$producto->stock}}</td>
+                            <td>{{$producto->visible}}</td>
                             <td>
                                 <a class="btn btn-info" href="{{ route('plataforma.productos.show', [
                                     'producto' => $producto->codigo]) }}"><i class="fas fa-eye"></i></a>
                                 <a class="btn btn-primary" href="{{ route('plataforma.productos.edit', [
                                     'producto' => $producto->codigo]) }}"><i class="fas fa-edit"></i></a>
+                                    {{--}}
                                 <form class="d-inline form-eliminar-prod"
                                       action="{{ route('plataforma.productos.destroy', [
                             'producto' => $producto->codigo,
@@ -47,7 +50,22 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </form>
-
+                                {{--}}
+                                @if($producto->visible=="visible")
+                                <form class="deshabil" action="{{route('plataforma.productos.deshabilitar', ['producto' => $producto->codigo]) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" class="form-control" name="visible" value="invisible" required>
+                                    <button type="submit" class="btn btn-danger"> <i class="fas fa-trash-alt"></i> </button>
+                                </form>
+                            @elseif($producto->visible=="invisible")
+                                <form class="habil" action="{{route('plataforma.productos.habilitar', ['producto' => $producto->codigo]) }}" method="post">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" class="form-control" name="visible" value="visible" required>
+                                    <button type="submit" class="btn btn-success"><i class="fas fa-toggle-on"></i> Habilitar</button>
+                                </form>
+                            @endif
 
                             </td>
                         </tr>

@@ -43,9 +43,9 @@ class RepartoController extends Controller
     }
     public function store(RepartoRequest $request)
     {   //Venta a revisar
-        $ventaRevisar = Venta::where("id", request()->id_venta)->get('estado');
-
-        if($ventaRevisar == "online"){
+        $ventaRevisar = Venta::where("id", request()->id_venta)->get();
+        //dd($ventaRevisar);
+        if($ventaRevisar[0]->medio_venta == "online"){
             $reparto = Reparto::create($request->validated());
             $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "en reparto"]);
         }else{

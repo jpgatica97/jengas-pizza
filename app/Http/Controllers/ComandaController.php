@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ComandaFinalizarRequest;
 use App\Http\Requests\ComandaRequest;
 use App\Models\Comanda;
+use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use App\Models\PromocionesVentas;
 use App\Models\Venta;
@@ -19,6 +20,14 @@ class ComandaController extends Controller
         $this->middleware('auth');
     }
 
+    public function tomar()
+    {
+        $ventas = Venta::where('estado', 'pagado')->get();
+        return view('plataforma.comandas.tomaPedidos')->with([
+            'ventas' => $ventas,
+        ]);
+
+    }
     //Muestra las comandas a preparar
     public function index(){
         return view('plataforma.comandas.index')->with([
@@ -32,6 +41,13 @@ class ComandaController extends Controller
 
         $comanda = Comanda::create($request->validated());
         $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "en comanda"]);
+        $promosV = PromocionesVentas::where('id_venta', request()->id_venta)->get();
+        foreach($promosV as $pv){
+            $pps = ProductosPromociones::where('codigo_promocion', $pv->codigo_promocion)->get();
+            foreach($pps as $pp){
+                DB::update('update productos set stock = stock -'.$pp->cantidad.' where codigo = '.$pp->codigo_producto);
+            }
+        }
         return redirect()->back()->with('comanda', 'ok');
     }
 

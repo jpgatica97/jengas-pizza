@@ -14,4 +14,12 @@ class ProductosPromociones extends Model
         'cantidad',
         'codigo_promocion',
     ];
+    public function producto()
+    {
+        return $this->belongsToMany(Producto::class)->withPivot('cantidad');
+    }
+    public function promocion()
+    {
+        return $this->belongsToMany(Promocion::class)->withPivot('cantidad');
+    }
 }

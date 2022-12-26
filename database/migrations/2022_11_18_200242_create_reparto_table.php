@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('estado');
             $table->string('rut_repartidor');
             $table->bigInteger('id_venta')->unsigned();
+            $table->timestamp('hora_entrega');
 
             $table->foreign('id_venta')->references('id')->on('ventas');
             $table->foreign('rut_repartidor')->references('rut')->on('usuarios');
