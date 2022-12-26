@@ -51,8 +51,12 @@
                             </div>
                             <p>Su pedido ya está en camino a su domicilio, por favor, esté atento 👀</p>
                             <h3>Detalles reparto</h3>
-                            <p><strong>Repartidor/a:</strong>{{$reparto->repartidor->nombre_completo}}</p>
-                            <p><strong>Hora estimada llegada:</strong>{{$reparto->hora_entrega}}</p>
+                            @foreach ($repartidores as $repartidor)
+                                @if ($reparto->first()->rut_repartidor == $repartidor->rut)
+                                <p><strong>Repartidor/a:</strong>{{$repartidor->nombre_completo}}</p>
+                                @endif
+                            @endforeach
+                            <p><strong>Hora estimada llegada: </strong>{{ \Carbon\Carbon::parse($reparto->first()->hora_entrega)->format('H:i') }} hrs</p>
                         </div>
                         @endif
                         @if ($venta->estado == "finalizado")

@@ -1,7 +1,7 @@
 @extends('layouts.plataforma')
 
 @section('content')
-    <form action="{{ route('usuarios.update', ['usuario' => $usuario->rut]) }}" method="POST">
+    <form action="{{ route('plataforma.usuarios.update', ['usuario' => $usuario->rut])}}" method="POST">
         @csrf
         @method('PUT')
         <div class="container">

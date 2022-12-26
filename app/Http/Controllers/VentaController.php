@@ -13,6 +13,7 @@ use App\Models\Producto;
 use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use App\Models\PromocionesVentas;
+use App\Models\Reparto;
 use App\Models\User;
 use App\Models\Venta;
 use App\Services\CarritoService;
@@ -59,7 +60,7 @@ class VentaController extends Controller
     {
         return view('plataforma.ventas.create')->with([
             'promociones_venta' => DB::table('promociones_ventas')->where('id_venta', $venta->id)->get(),
-            'promociones' => DB::table('promociones')->get(),
+            'promociones' => Promocion::where('visible', 'visible')->get(),
             'venta' => $venta,
         ]);
     }
@@ -112,7 +113,7 @@ class VentaController extends Controller
 
         $venta = Venta::create($request->validated());
 
-        return redirect()->route('plataforma.ventas.create', ['venta' => $venta->id,]);
+        return redirect()->route('plataforma.ventas.index');
     }
     public function storeO(VentaRequest $request)
     {
@@ -175,9 +176,7 @@ class VentaController extends Controller
         $total = $neto + $iva;
         $venta_g = Venta::where("id", $venta->id)->update(["neto" => $neto, "iva" => $iva, "total" => $total, "metodo_pago" => $request->metodo_pago, "estado" => $request->estado]);
 
-        return redirect()->route('plataforma.ventas.show', [
-            'venta' => $venta->id
-        ]);
+        return redirect()->route('plataforma.ventas.index');
     }
     //Funcion que inserta una promo a la venta
     public function insertarPromo(ProductoVentaRequest $request)
@@ -275,6 +274,8 @@ class VentaController extends Controller
         $promos = PromocionesVentas::where('id_venta', $venta->id)->get();
         return view('inicio.seguimiento')->with([
             'venta' => $venta, 'promos' => $promos,
+            'reparto' => Reparto::where('id_venta', $venta->id)->get(),
+            'repartidores' => User::where('rol', 'repartidor')->get(),
         ]);
 
     }

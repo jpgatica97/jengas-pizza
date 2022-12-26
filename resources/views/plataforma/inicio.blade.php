@@ -3,129 +3,184 @@
 @section('content')
     <h1 style="margin-left: 10px; color: white;">Panel principal</h1>
     <br>
-   @if ($deshabilitaciones == true)
-    <div class="container">
-        <div class="alert alert-warning" role="alert">
-            <h3>Poco stock de ingrediente</h3>
-            <p>
-                Se ha detectado un producto de inventario con muy poco stock, por lo que se han deshabilitado la venta de ciertas promociones asociadas a este producto.
-                Para revisar inventario, presione <a class="alert-link" href="{{route('plataforma.productos.index')}}">aquí</a>
-                </p>
-        </div>
-    </div>
-   @endif
-   @if ($invisibles == true)
-   <div class="container">
-    <div class="alert alert-danger" role="alert">
-        <h3>Promocion(es) deshabilitada(s)</h3>
-        <p>
-            Se ha detectado una o más promociones deshabilitadas, para revisarlas, presione <a class="alert-link" href="{{ route('plataforma.promociones.deshabilitados')}}">aquí</a> .
-            </p>
-    </div>
-   </div>
-  @endif
-    <br>
-    <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        @if (isset($cantPresencial->first()->veces))
-                            <h3>{{ $cantPresencial->first()->veces }}</h3>
-                        @else
-                            <h3>0</h3>
-                        @endif
-
-                        <p>Ventas presenciales</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-dark">
-                    <div class="inner">
-                        @if (isset($cantOnline->first()->veces))
-                        <h3>{{ $cantOnline->first()->veces }}</h3>
-                        @else
-                        <h3>0</h3>
-                        @endif
-
-                        <p>Ventas Online</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        @php
-                            $totalMes = 0;
-                            foreach ($montoVentasMes as $mv) {
-                                $totalMes = $totalMes + $mv->total;
-                            }
-                        @endphp
-                        <h3>${{ $totalMes }}</h3>
-
-                        <p>Total recaudado en el mes</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-cash"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">-</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Ventas de este mes</h3>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="d-flex">
-                    <p class="d-flex flex-column">
-                        @if (isset($cantOnline->first()->veces) && isset($cantPresencial->first()->veces))
-                        <span class="text-bold text-lg">{{ $cantOnline->first()->veces + $cantPresencial->first()->veces }}</span>
-                        @else
-                        <span class="text-bold text-lg">Faltan ventas</span>
-                        @endif
-                        <span>Total ventas</span>
+    @if (Auth::user()->rol == 'administrador' || Auth::user()->rol == 'vendedor')
+        @if ($deshabilitaciones == true)
+            <div class="container">
+                <div class="alert alert-warning" role="alert">
+                    <h3>Poco stock de ingrediente</h3>
+                    <p>
+                        Se ha detectado un producto de inventario con muy poco stock, por lo que se han deshabilitado la
+                        venta de ciertas promociones asociadas a este producto.
+                        Para revisar inventario, presione <a class="alert-link"
+                            href="{{ route('plataforma.productos.index') }}">aquí</a>
                     </p>
                 </div>
-                <!-- /.d-flex -->
-
-                <div class="position-relative mb-4">
-                    <canvas id="ventas-chart" height="200"></canvas>
+            </div>
+        @endif
+        @if ($invisibles == true)
+            <div class="container">
+                <div class="alert alert-danger" role="alert">
+                    <h3>Promocion(es) deshabilitada(s)</h3>
+                    <p>
+                        Se ha detectado una o más promociones deshabilitadas, para revisarlas, presione <a class="alert-link"
+                            href="{{ route('plataforma.promociones.deshabilitados') }}">aquí</a> .
+                    </p>
                 </div>
+            </div>
+        @endif
+        <br>
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            @if (isset($cantPresencial->first()->veces))
+                                <h3>{{ $cantPresencial->first()->veces }}</h3>
+                            @else
+                                <h3>0</h3>
+                            @endif
 
-                <div class="d-flex flex-row justify-content-end">
-                    <span class="mr-2">
-                        <i class="fas fa-square text-primary"></i> Venta online
-                    </span>
+                            <p>Ventas presenciales</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('plataforma.ventas.index') }}" class="small-box-footer">Más info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-dark">
+                        <div class="inner">
+                            @if (isset($cantOnline->first()->veces))
+                                <h3>{{ $cantOnline->first()->veces }}</h3>
+                            @else
+                                <h3>0</h3>
+                            @endif
 
-                    <span>
-                        <i class="fas fa-square text-gray"></i> Venta presencial
-                    </span>
+                            <p>Ventas Online</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="{{ route('plataforma.ventas.indexOnline') }}" class="small-box-footer">Más info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            @php
+                                $totalMes = 0;
+                                foreach ($montoVentasMes as $mv) {
+                                    $totalMes = $totalMes + $mv->total;
+                                }
+                            @endphp
+                            <h3>${{ $totalMes }}</h3>
+
+                            <p>Total recaudado en el mes</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-cash"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">-</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="card-title">Ventas de este mes</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex">
+                        <p class="d-flex flex-column">
+                            @if (isset($cantOnline->first()->veces) && isset($cantPresencial->first()->veces))
+                                <span
+                                    class="text-bold text-lg">{{ $cantOnline->first()->veces + $cantPresencial->first()->veces }}</span>
+                            @else
+                                <span class="text-bold text-lg">Faltan ventas</span>
+                            @endif
+                            <span>Total ventas</span>
+                        </p>
+                    </div>
+                    <!-- /.d-flex -->
+
+                    <div class="position-relative mb-4">
+                        <canvas id="ventas-chart" height="200"></canvas>
+                    </div>
+
+                    <div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                            <i class="fas fa-square text-primary"></i> Venta online
+                        </span>
+
+                        <span>
+                            <i class="fas fa-square text-gray"></i> Venta presencial
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" style="background-color: white">
+            <h4>Top productos más vendidos</h4>
+            <div class="container">
+                @foreach ($cantProdVentas as $cp)
+                    <li>{{ $cp->nombre }} con {{ $cp->veces }} veces </li>
+                @endforeach
+
+            </div>
+        </div>
+    @elseif (Auth::user()->rol == 'cocinero')
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-dark">
+                <div class="inner">
+                    <p>Tomar comanda</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pizza"></i>
+                </div>
+                <a href="{{ route('plataforma.comandas.tomar') }}" class="small-box-footer">ir <i
+                        class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-dark">
+                <div class="inner">
+                    <p>Mis comandas</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pizza"></i>
+                </div>
+                <a href="{{ route('plataforma.comandas.index') }}" class="small-box-footer">ir <i
+                        class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    @elseif (Auth::user()->rol == 'repartidor')
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-dark">
+            <div class="inner">
+                <p>ver repartos</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pizza"></i>
+            </div>
+            <a href="{{ route('plataforma.repartos.index') }}" class="small-box-footer">ir <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
     </div>
-    <div class="container">
-        <h4>Top productos más vendidos</h4>
-    </div>
+    @endif
 @endsection
 @section('js')
     <!-- jQuery -->

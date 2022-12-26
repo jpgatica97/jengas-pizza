@@ -22,6 +22,6 @@ class Reparto extends Model
     }
     public function repartidor()
     { //relacion con id personalizada;
-        return $this->hasOne(User::class, 'rut_repartidor');
+        return $this->belongsTo(User::class, 'rut');
     }
 }

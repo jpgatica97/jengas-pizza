@@ -102,8 +102,9 @@ class HomeController extends Controller
         ->join('promociones_ventas as b', 'b.id_venta', '=', 'a.id')
         ->join('promociones as c', 'b.codigo_promocion', '=', 'c.codigo')
         ->where('a.estado', '=', 'finalizado')
-        ->whereMonth('a.fecha', request()->mes)->select('c.nombre')
-        ->selectRaw('count(c.nombre) as veces')->groupBy('c.nombre')->orderByDesc('veces')
+        ->whereYear('a.fecha', $anio)
+        ->whereMonth('a.fecha', $mes)->select('c.nombre')
+        ->selectRaw('count(c.nombre) as veces')->groupBy('c.nombre')->orderByDesc('veces')->take('5')
         ->get();
         $prod = Producto::where('stock', '<=', 1)->get();
         $deshabilitaciones = false;
@@ -116,19 +117,25 @@ class HomeController extends Controller
             $invisibles = true;
         }
 
-        //dd($cantVentasMesOnline);
-        if (Auth::user()->rol == 'cliente') {
+        //dd($cantProdVentas);
+    if(Auth::user()->habilitacion == 'deshabilitado'){
+        return view('inicio.inicio')->with([
+            'promociones' => Promocion::where('visible', 'visible')->get(),
+            'habilitacion' => 'deshabilitado',
+        ]);
+
+    }else if (Auth::user()->rol == 'cliente') {
             return view('inicio.inicio')->with([
-                'promociones' => DB::table('promociones')->get(),
+                'promociones' => Promocion::where('visible', 'visible')->get(),
             ]);
-        } else {
+
+    }else{
             return view('plataforma.inicio')->with([
                 'cantVentasMes' => $cantVentasMes, 'cantOnline' => $cantOnline, 'cantPresencial' => $cantPresencial,
                 'montoVentasMes' => $montoVentasMes, 'cantVentasMesOnline' => $cantVentasMesOnline, 'cantVentasMesPresencial' => $cantVentasMesPresencial,
                 'cantProdVentas' => $cantProdVentas, 'deshabilitaciones' => $deshabilitaciones, 'invisibles' => $invisibles,
             ]);
         }
-
     }
 
     public function inicio()
@@ -166,7 +173,7 @@ class HomeController extends Controller
 
     public function update(UsuarioRequest $request, User $usuario)
     {
-        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['ombre_completo' => request()->nombre_completo], ['email' =>request()->email], ['rol' => request()->rol], ['telefono'=>request()->telefono],['direccion'=>request()->direccion], ['habilitacion' => request()->habilitacio]);
+        $user = DB::table('usuarios')->where('rut', $usuario->rut)->update(['nombre_completo' => request()->nombre_completo], ['email' =>request()->email], ['rol' => request()->rol], ['telefono'=>request()->telefono],['direccion'=>request()->direccion], ['habilitacion' => request()->habilitacion]);
         dd($usuario);
         return redirect()->back()->with('actualizacion', 'ok');
 
@@ -200,7 +207,6 @@ class HomeController extends Controller
     }
 
     public function deshabilitar(UsuarioHabilitarRequest $request, User $usuario){
-
         $usuario->update($request->validated());
         return redirect()->route('plataforma.usuarios.habilitaciones')->with('deshabilitacion', 'ok');
     }

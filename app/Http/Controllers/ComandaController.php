@@ -8,6 +8,8 @@ use App\Models\Comanda;
 use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use App\Models\PromocionesVentas;
+use App\Models\Reparto;
+use App\Models\User;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,8 +33,8 @@ class ComandaController extends Controller
     //Muestra las comandas a preparar
     public function index(){
         return view('plataforma.comandas.index')->with([
-            'comandas' => DB::table('comandas')->where('estado', 'pendiente')->get(),
-            'cocineros' => DB::table('usuarios')->where('rol', 'cocinero')->get(),
+            'comandas' => Comanda::where('estado', 'pendiente')->get(),
+            'cocineros' => User::where('rol', 'cocinero')->get(),
         ]);
 
     }
@@ -65,6 +67,16 @@ class ComandaController extends Controller
     //Función que actualiza el estado de la comanda
     public function update(ComandaFinalizarRequest $request, Comanda $comanda){
         $venta = Venta::where("id", $comanda->id_venta)->update(["estado"=> "preparado"]);
+        //Venta a revisar
+        $ventaRevisar = Venta::where("id", $comanda->id_venta)->get();
+        //dd($ventaRevisar);
+        if($ventaRevisar[0]->medio_venta == "online"){
+            $venta = Venta::where("id", $comanda->id_venta)->update(["estado"=> "preparado"]);
+            //$reparto = Reparto::create($request->validated());
+            //$venta = Venta::where("id", request()->id_venta)->update(["estado"=> "en reparto"]);
+        }else{
+            $venta = Venta::where("id", request()->id_venta)->update(["estado"=> "finalizado"]);
+        }
         $comanda->update($request->validated());
         return redirect()->route('plataforma.comandas.index')->with('finalizado', 'ok');
     }

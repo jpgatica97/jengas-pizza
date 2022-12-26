@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function comandas()
     { //relacion con id personalizada;
-        return $this->belongsToMany(Comanda::class, 'rut_encargado');
+        return $this->belongsTo(Comanda::class, 'rut_encargado');
     }
 
     public function ventas()

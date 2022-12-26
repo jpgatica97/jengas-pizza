@@ -27,6 +27,7 @@ class RepartoRequest extends FormRequest
         'estado' => ['required'],
         'rut_repartidor' => ['required'],
         'id_venta' => ['required'],
+        'hora_entrega' => ['required'],
         ];
     }
 }

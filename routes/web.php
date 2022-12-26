@@ -19,6 +19,15 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'inicio'])->name('i
 
 Auth::routes();
 
+//Rutas de usuarios
+Route::get('plataforma/usuarios',[\App\Http\Controllers\HomeController::class, 'empleados'])->name('plataforma.usuarios.index');
+Route::get('plataforma/usuarios/habilitaciones',[\App\Http\Controllers\HomeController::class, 'habilitaciones'])->name('plataforma.usuarios.habilitaciones');
+Route::get('plataforma/usuarios/{usuario}/edit', [\App\Http\Controllers\HomeController::class, 'edit'])->name('plataforma.usuarios.edit');
+Route::get('plataforma/usuarios/{usuario}', [\App\Http\Controllers\HomeController::class, 'show'] )->name('plataforma.usuarios.show');
+Route::match(['put', 'patch'],'plataforma/usuarios/{usuario}', [\App\Http\Controllers\HomeController::class, 'update'])->name('plataforma.usuarios.update');
+Route::match(['put', 'patch'],'plataforma/usuarios/habilitar/{usuario}', [\App\Http\Controllers\HomeController::class, 'habilitar'])->name('plataforma.usuarios.habilitar');
+Route::match(['put', 'patch'],'plataforma/usuarios/deshabilitar/{usuario}', [\App\Http\Controllers\HomeController::class, 'deshabilitar'])->name('plataforma.usuarios.deshabilitar');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/plataforma', [App\Http\Controllers\HomeController::class, 'index'])->name('plataforma');
 
@@ -49,14 +58,6 @@ Route::match(['put', 'patch'],'plataforma/promociones/deshabilitar/{promocion}',
 
 
 
-//Rutas de usuarios
-Route::get('plataforma/usuarios',[\App\Http\Controllers\HomeController::class, 'empleados'])->name('plataforma.usuarios.index');
-Route::get('plataforma/usuarios/habilitaciones',[\App\Http\Controllers\HomeController::class, 'habilitaciones'])->name('plataforma.usuarios.habilitaciones');
-Route::get('plataforma/usuarios/{usuario}', [\App\Http\Controllers\HomeController::class, 'show'] )->name('plataforma.usuarios.show');
-Route::get('plataforma/usuarios/{usuario}/edit', [\App\Http\Controllers\HomeController::class, 'edit'])->name('plataforma.usuarios.edit');
-Route::match(['put', 'patch'],'plataforma/usuarios/{usuario}', [\App\Http\Controllers\HomeController::class, 'update'])->name('usuarios.update');
-Route::match(['put', 'patch'],'plataforma/usuarios/habilitar/{usuario}', [\App\Http\Controllers\HomeController::class, 'habilitar'])->name('plataforma.usuarios.habilitar');
-Route::match(['put', 'patch'],'plataforma/usuarios/deshabilitar/{usuario}', [\App\Http\Controllers\HomeController::class, 'deshabilitar'])->name('plataforma.usuarios.deshabilitar');
 
 //Rutas de ventas
 Route::get('plataforma/ventasL',[\App\Http\Controllers\VentaController::class, 'index'])->name('plataforma.ventas.index');

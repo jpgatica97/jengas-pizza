@@ -48,7 +48,10 @@
             <input type="hidden" class="form-control" name="estado"value="finalizado" required>
             <input type="hidden" class="form-control" name="id"
                                             value="{{$reparto->id}}" required>
+            @if ($reparto->estado != "finalizado")
             <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Finalizar despacho</button>
+
+            @endif
         </form>
         </div>
     </div>

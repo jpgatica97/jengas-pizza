@@ -8,6 +8,8 @@
         <p style="color: white">Pizzas a la piedra</p>
         <p style="color: white">Sabor y estilo americano</p>
         <p style="color: white">Concepto único en la zona!! "Hot and Ready"</p>
+        <h3 style="color: white"><u>Horarios de atención:</u></h3>
+        <p style="color: white">Lunes a Sábado <strong>de 16:00hrs a 00:00hrs</strong></p>
     </div>
 </div>
 <div style="display: flex; position: sticky">
@@ -37,9 +39,5 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0
                 </div>
             </div>
             @endforeach
-
     <div>
-
-
-
 @endsection

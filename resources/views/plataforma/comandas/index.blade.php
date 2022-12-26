@@ -26,11 +26,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                         <tr>
                             <td>{{$comanda->id_venta}}</td>
                             <td>
-                                @foreach ($cocineros as $cocinero)
-                                    @if ($cocinero->rut == $comanda->rut_encargado)
-                                    {{$cocinero->nombre_completo}}
-                                    @endif
-                                @endforeach
+                                {{$comanda->cocinero->nombre_completo}}
                             </td>
                             <td>{{$comanda->estado}}</td>
                             <td>

@@ -83,6 +83,8 @@
                         Inicio
                     </a>
                     <div class="sb-sidenav-menu-heading">Gestión</div>
+                    @if (Auth::user()->rol=="administrador" || Auth::user()->rol=="vendedor")
+
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                         Inventario
@@ -92,7 +94,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ route('plataforma.productos.index') }}">Ver inventario</a>
                             <a class="nav-link" href="{{ route('plataforma.promociones.index') }}">Ver promociones</a>
-                            <a class="nav-link" href="{{ route('plataforma.ingredientes.index') }}">Asociar inventario a pomociones</a>
+                            <a class="nav-link" href="{{ route('plataforma.ingredientes.index') }}">Asociar inventario a promociones</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -138,7 +140,8 @@
                             </div>
                         </nav>
                     </div>
-
+                    @endif
+                    @if (Auth::user()->rol=="administrador" || Auth::user()->rol=="cocinero")
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseComandas" aria-expanded="false" aria-controls="collapseComandas">
                         <div class="sb-nav-link-icon"> <i class="fas fa-pizza"></i> </div>
                         Comandas
@@ -152,6 +155,8 @@
                         </nav>
                     </div>
 
+                    @endif
+                    @if (Auth::user()->rol=="administrador")
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUsuarios" aria-expanded="false" aria-controls="collapseUsuarios">
                         <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                         Empleados
@@ -164,6 +169,8 @@
                         </nav>
                     </div>
 
+                    @endif
+                    @if (Auth::user()->rol=="administrador" || Auth::user()->rol=="repartidor")
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRepartos" aria-expanded="false" aria-controls="collapseRepartos">
                         <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
                         Despachos
@@ -171,13 +178,12 @@
                     </a>
                     <div class="collapse" id="collapseRepartos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{ route('plataforma.repartos.create') }}">Agregar despacho</a>
-                            <a class="nav-link" href="{{ route('plataforma.repartos.index') }}">Gestionar despachos</a>
+                            <a class="nav-link" href="{{ route('plataforma.repartos.create') }}">Tomar despacho</a>
+                            <a class="nav-link" href="{{ route('plataforma.repartos.index') }}">Ver despachos</a>
                         </nav>
                     </div>
 
-
-
+                    @endif
 
                 </div>
             </div>

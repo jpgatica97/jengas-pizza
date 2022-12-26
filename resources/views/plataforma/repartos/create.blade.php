@@ -3,7 +3,7 @@
 @section('content')
     <div class="container" style ="background-color: rgba(215,215,215,0.1);
 background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5))">
-        <h1 style="margin-top: 10px">Despachos</h1>
+        <h1 style="margin-top: 10px">Pedidos sin despachar</h1>
 
         @if ($ventas->isEmpty())
             <div class="alert alert-warning">
@@ -50,7 +50,7 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
    <div class="modal-dialog">
        <div class="modal-content">
            <div class="modal-header">
-               <h5 class="modal-title" id="staticBackdropLabel">Asignar despacho</h5>
+               <h5 class="modal-title" id="staticBackdropLabel">Tomar despacho</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
            <div class="modal-body">
@@ -58,22 +58,14 @@ background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255
                      action="{{ route('repartos.store') }}"
                      method="post">
                    @csrf
+                   <h3>La dirección de este despacho es:</h3>
+                   <h4>{{$venta->cliente->direccion}}</h4>
                    <input type="hidden" name="estado" value="en reparto">
                    <input type="hidden" name="id_venta" value="{{ $venta->id}}">
-                           <div class="col">
-                               <label for="rut_repartidor">Repartidor encargado:</label>
-                               <div class="col-md-12">
-                                   <select class="form-select" id="rut_repartidot" name="rut_repartidor">
-                                       <option selected value="">Seleccione repartidor...</option>
-                                           @foreach ($clientes as $cliente)
-                                               @if ($cliente->rol == "repartidor")
-                                               <option value="{{ $cliente->rut }}">{{ $cliente->nombre_completo }}</option>
-                                               @endif
-                                           @endforeach
+                   <input type="hidden" name="rut_repartidor" value="{{ Auth::user()->rut }}">
+                   <label for="hora_entrega">Seleccione dia y HORA estimados de entrega:</label>
+                   <input type="datetime-local" name="hora_entrega" id="hora_entrega" value="" min="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}" max="{{ \Carbon\Carbon::parse(\Carbon\Carbon::now())->format('Y-m-d') }}">
 
-                                   </select>
-                               </div>
-                           </div>
            </div>
            <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>

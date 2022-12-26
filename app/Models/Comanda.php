@@ -19,7 +19,7 @@ class Comanda extends Model
 
     public function cocinero()
     { //relacion con id personalizada;
-        return $this->hasOne(User::class, 'rut_encargado');
+        return $this->belongsTo(User::class, 'rut_encargado');
     }
 
 

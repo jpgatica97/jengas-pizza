@@ -18,7 +18,6 @@
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/validarRut.js') }}"></script>
-
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
@@ -88,5 +87,14 @@
         </main>
     </div>
 </body>
+@if(session('habilitacion') == 'deshabilitado')
+    <script>
+        Swal.fire(
+            'Usuario deshabilitado',
+            'Usted está deshabilitado para acceder a la plataforma, por favor, contáctese con el administrador',
+            'error'
+        )
+    </script>
 
+@endif
 </html>
