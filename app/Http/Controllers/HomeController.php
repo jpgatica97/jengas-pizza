@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\ProductosPromociones;
 use App\Models\Promocion;
 use App\Models\User;
+use App\Models\Venta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,8 +117,13 @@ class HomeController extends Controller
         foreach($promo as $pro){
             $invisibles = true;
         }
+        $vAnular = Venta::where('estado', 'rechazada comanda')->get();
+        $anulados = false;
+        foreach($vAnular as $va){
+            $anulados = true;
+        }
 
-        //dd($cantProdVentas);
+        //dd($deshabilitaciones);
     if(Auth::user()->habilitacion == 'deshabilitado'){
         return view('inicio.inicio')->with([
             'promociones' => Promocion::where('visible', 'visible')->get(),
@@ -134,6 +140,7 @@ class HomeController extends Controller
                 'cantVentasMes' => $cantVentasMes, 'cantOnline' => $cantOnline, 'cantPresencial' => $cantPresencial,
                 'montoVentasMes' => $montoVentasMes, 'cantVentasMesOnline' => $cantVentasMesOnline, 'cantVentasMesPresencial' => $cantVentasMesPresencial,
                 'cantProdVentas' => $cantProdVentas, 'deshabilitaciones' => $deshabilitaciones, 'invisibles' => $invisibles,
+                'rechazados' => $anulados,
             ]);
         }
     }

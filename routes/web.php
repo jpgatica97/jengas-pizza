@@ -61,9 +61,11 @@ Route::match(['put', 'patch'],'plataforma/promociones/deshabilitar/{promocion}',
 
 //Rutas de ventas
 Route::get('plataforma/ventasL',[\App\Http\Controllers\VentaController::class, 'index'])->name('plataforma.ventas.index');
+Route::get('plataforma/ventas/rechazados',[\App\Http\Controllers\VentaController::class, 'rechazados'])->name('plataforma.ventas.rechazados');
 Route::get('plataforma/ventasTomar',[\App\Http\Controllers\VentaController::class, 'tomaPedidos'])->name('plataforma.ventas.tomaPedidos');
 Route::get('plataforma/ventasO',[\App\Http\Controllers\VentaController::class, 'indexOnline'])->name('plataforma.ventas.indexOnline');
 Route::get('plataforma/ventasL/create/{venta}', [\App\Http\Controllers\VentaController::class, 'create'])->name('plataforma.ventas.create');
+Route::post('ventas/anular/{venta}', [\App\Http\Controllers\VentaController::class, 'anular'])->name('ventas.anular');
 Route::post('plataforma/ventas', [\App\Http\Controllers\VentaController::class, 'store'])->name('ventas.store');
 Route::get('plataforma/ventas/{venta}', [\App\Http\Controllers\VentaController::class, 'show'] )->name('plataforma.ventas.show');
 Route::get('plataforma/ventas/{venta}/edit', [\App\Http\Controllers\VentaController::class, 'edit'])->name('plataforma.ventas.edit');
@@ -85,7 +87,7 @@ Route::get('plataforma/comandas/create', [\App\Http\Controllers\ComandaControlle
 Route::post('plataforma/comandas', [\App\Http\Controllers\ComandaController::class, 'store'])->name('comandas.store');
 Route::get('plataforma/comandas/{comanda}', [\App\Http\Controllers\ComandaController::class, 'show'] )->name('plataforma.comandas.show');
 Route::match(['put', 'patch'],'plataforma/comandas/{comanda}', [\App\Http\Controllers\ComandaController::class, 'update'])->name('plataforma.comandas.finalizar');
-
+Route::match(['put', 'patch'],'plataforma/comandas/rechazar/{comanda}', [\App\Http\Controllers\ComandaController::class, 'rechazar'])->name('plataforma.comandas.rechazar');
 
 //Rutas de repartos
 Route::get('plataforma/repartos',[\App\Http\Controllers\RepartoController::class, 'index'])->name('plataforma.repartos.index');
@@ -103,6 +105,7 @@ Route::delete('plataforma/promociones/{promocion}/carrito/{carrito}', [\App\Http
 Route::get('carrito',[\App\Http\Controllers\CarritoController::class, 'index'])->name('carritos.index');
 Route::get('ventas/create', [\App\Http\Controllers\VentaController::class, 'createO'])->name('ventasO.create');
 Route::post('ventas/', [\App\Http\Controllers\VentaController::class, 'storeO'])->name('ventasO.store');
+Route::post('ventas/anular', [\App\Http\Controllers\VentaController::class, 'anular'])->name('ventas.anular');
 Route::get('ventas/webpay/{venta}', [\App\Http\Controllers\VentaController::class, 'webpay'])->name('ventasO.webpay');
 Route::get('ventas/confirmacion/{venta}', [\App\Http\Controllers\VentaController::class, 'confirmacion'])->name('ventasO.confirmacion');
 Route::get('ventas/seguimiento/{venta}', [\App\Http\Controllers\VentaController::class, 'seguimiento'])->name('ventas.seguimiento');

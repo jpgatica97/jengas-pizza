@@ -162,8 +162,9 @@ class VentaController extends Controller
     //Función que anula una venta
     public function anular(AnularVentaRequest $request, Venta $venta)
     {
-        $venta->update($request->validated());
-        return redirect()->route('plataforma.ventas.index');
+        //dd($venta);
+        DB::table('ventas')->where("id", request()->id_venta)->update(["estado" => "anulado"]);
+        return redirect()->route('plataforma.ventas.rechazados');
     }
 
     //Función que actualiza los valores de una venta y los almacena
@@ -371,6 +372,13 @@ class VentaController extends Controller
         }else{
             return redirect()->back()->with('fueraFecha', 'fuera');
         }
+
+    }
+    public function rechazados()
+    {
+        return view('plataforma.ventas.rechazados')->with([
+            'ventas' => Venta::where('estado', 'rechazado comanda')->get(),
+        ]);
 
     }
 

@@ -49,6 +49,15 @@
                                             value="{{$comanda->id}}" required>
             <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Finalizar comanda</button>
         </form>
+        <form class="d-inline form-rechazar-com" style="text-align: center" action="{{route('plataforma.comandas.rechazar', [
+            'comanda' => $comanda->id])}}" method="post">
+            @method('PUT')
+            @csrf
+            <input type="hidden" class="form-control" name="estado"value="rechazado comanda" required>
+            <input type="hidden" class="form-control" name="id" value="{{$comanda->id}}" required>
+            <input type="hidden" class="form-control" name="id_venta" value="{{$comanda->id_venta}}" required>
+            <button type="submit" class="btn btn-warning"><i class="fas fa-deny"></i> Rechazar comanda</button>
+        </form>
     </div>
 @endsection
 
@@ -64,6 +73,26 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, finalizar!',
+                cancelButtonText: 'No, cancelar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    this.submit();
+                }
+            })
+        });
+    </script>
+    <script>
+        $('.form-rechazar-com').submit(function(e){
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro/a de rechazar la comanda?',
+                text: "La comanda se marcará como rechazada y se avisará a vendedor para que la pueda anular",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, rechazar!',
                 cancelButtonText: 'No, cancelar!'
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -17,13 +17,24 @@
                 </div>
             </div>
         @endif
-        @if ($invisibles == true)
+        @if ($invisibles==true)
             <div class="container">
                 <div class="alert alert-danger" role="alert">
                     <h3>Promocion(es) deshabilitada(s)</h3>
                     <p>
                         Se ha detectado una o más promociones deshabilitadas, para revisarlas, presione <a class="alert-link"
                             href="{{ route('plataforma.promociones.deshabilitados') }}">aquí</a> .
+                    </p>
+                </div>
+            </div>
+        @endif
+        @if ($rechazados==true)
+            <div class="container">
+                <div class="alert alert-info" role="alert">
+                    <h3>Comanda rechazada</h3>
+                    <p>
+                        Un cocinero rechazó una comanda por falta de insumos, para anular la venta, presione <a class="alert-link"
+                            href="{{ route('plataforma.ventas.rechazados') }}">aquí</a>
                     </p>
                 </div>
             </div>

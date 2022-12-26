@@ -80,6 +80,11 @@ class ComandaController extends Controller
         $comanda->update($request->validated());
         return redirect()->route('plataforma.comandas.index')->with('finalizado', 'ok');
     }
+    public function rechazar(ComandaFinalizarRequest $request, Comanda $comanda){
+        $venta = Venta::where("id", $comanda->id_venta)->update(["estado"=> "rechazado comanda"]);
+        $comanda->update($request->validated());
+        return redirect()->route('plataforma.comandas.index')->with('rechazado', 'ok');
+    }
 
 
 }
